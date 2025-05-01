@@ -1,0 +1,39 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.10.0",
+  "type": "module",
+  "author": "front-desk",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --fix .",
+    "build": "tsdown",
+    "dev": "tsdown --watch --on-success \"node dist/index.js\"",
+    "typecheck": "tsc --noEmit",
+    "format": "pnpm biome format ./src --fix"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/node": "^22.15.2",
+    "@types/pg": "^8.11.14",
+    "tsdown": "^0.10.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=20.18.0"
+  },
+  "dependencies": {
+    "better-auth": "^1.2.7",
+    "dotenv": "^16.5.0",
+    "pg": "^8.15.6",
+    "ultimate-express": "^1.4.8"
+  }
+}

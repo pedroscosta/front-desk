@@ -12,5 +12,8 @@
   "keywords": [],
   "author": "tknickman",
   "license": "ISC",
-  "packageManager": "pnpm@7.30.5"
+  "packageManager": "pnpm@10.5.2",
+  "dependencies": {
+    "turbo": "^2.5.2"
+  }
 }
