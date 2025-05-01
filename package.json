@@ -1,0 +1,16 @@
+{
+  "name": "turborepo-empty-starter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An empty Turborepo starter",
+  "main": "index.js",
+  "scripts": {
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "dev": "turbo dev"
+  },
+  "keywords": [],
+  "author": "tknickman",
+  "license": "ISC",
+  "packageManager": "pnpm@7.30.5"
+}
