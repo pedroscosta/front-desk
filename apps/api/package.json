@@ -9,18 +9,28 @@
   ],
   "main": "./dist/index.js",
   "exports": {
-    ".": "./dist/index.js"
+    "./router": {
+      "types": "./src/live-state/router.ts",
+      "import": "./dist/live-state/router.js",
+      "require": "./dist/live-state/router.js"
+    },
+    "./schema": {
+      "types": "./src/live-state/schema.ts",
+      "import": "./dist/live-state/schema.js",
+      "require": "./dist/live-state/schema.js"
+    }
   },
   "scripts": {
     "lint": "biome lint .",
     "lint:fix": "biome lint --fix .",
     "build": "tsdown",
-    "dev": "tsdown --watch --on-success \"node dist/index.js\"",
+    "dev": "tsdown --watch --on-success \"node dist/index.js\" --dts",
     "typecheck": "tsc --noEmit",
     "format": "pnpm biome format ./src --fix"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@types/express": "^4.17.21",
     "@types/node": "^22.15.2",
     "@types/pg": "^8.11.14",
     "tsdown": "^0.10.2",
@@ -31,9 +41,11 @@
     "node": ">=20.18.0"
   },
   "dependencies": {
+    "@repo/live-state": "link:/Users/pedroscosta/projects/sync-poc/packages/live-state",
+    "@wll8/express-ws": "^1.0.6",
     "better-auth": "^1.2.7",
     "dotenv": "^16.5.0",
-    "pg": "^8.15.6",
-    "ultimate-express": "^1.4.8"
+    "express": "^4.21.2",
+    "pg": "^8.15.6"
   }
 }
