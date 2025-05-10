@@ -1,26 +1,13 @@
-import { useLiveQuery } from "@repo/live-state/client";
-import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@workspace/ui/components/button";
-import { ulid } from "ulid";
-import { store } from "../lib/live-state";
+import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute("/")({
-  component: HomeComponent,
-});
+export const Route = createFileRoute('/')({
+  component: Home,
+})
 
-function HomeComponent() {
-  const issues = useLiveQuery(store.issues);
-
+function Home() {
   return (
     <div className="p-2">
-      <h3>Welcome Home!</h3>
-      <Button
-        variant="default"
-        onClick={() => store.issues.insert({ id: ulid(), title: "test" })}
-      >
-        test
-      </Button>
-      <pre>{JSON.stringify(issues ?? {}, null, 2)}</pre>
+      <h3>Welcome Home!!!</h3>
     </div>
-  );
+  )
 }
