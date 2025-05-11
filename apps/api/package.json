@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@types/cors": "^2.8.18",
     "@types/express": "^4.17.21",
     "@types/node": "^22.15.2",
     "@types/pg": "^8.11.14",
@@ -44,6 +45,7 @@
     "@repo/live-state": "link:/Users/pedroscosta/projects/sync-poc/packages/live-state",
     "@wll8/express-ws": "^1.0.6",
     "better-auth": "^1.2.7",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "pg": "^8.15.6"

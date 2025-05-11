@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@workspace/ui/components/button";
+import { SignInForm } from "~/components/auth";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -7,9 +7,8 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
-    <div className="p-2">
-      <h3>Welcome Home!!!</h3>
-      <Button>Click me</Button>
+    <div className="w-full h-screen flex flex-col items-center justify-center">
+      <SignInForm />
     </div>
   );
 }
