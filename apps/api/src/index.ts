@@ -1,11 +1,15 @@
 import "./env";
 
+import { SQLStorage, expressAdapter, server } from "@repo/live-state/server";
 import expressWs from "@wll8/express-ws";
 import { toNodeHandler } from "better-auth/node";
 import cors from "cors";
 import express from "express";
 import process from "node:process";
+import { Pool } from "pg";
 import { auth } from "./lib/auth";
+import { router } from "./live-state/router";
+import { schema } from "./live-state/schema";
 
 const { app } = expressWs(express());
 
@@ -20,22 +24,21 @@ const corsOptions = {
 // Apply CORS middleware
 app.use(cors(corsOptions));
 
-// const lsServer = server({
-//   router,
-//   storage: new InMemoryStorage(),
-//   schema,
-// });
+const lsServer = server({
+  router,
+  storage: new SQLStorage(
+    new Pool({
+      connectionString: process.env.DATABASE_URL,
+    })
+  ),
+  schema,
+});
 
 app.all("/api/auth/*", toNodeHandler(auth));
 
 app.use(express.json());
 
-// app.ws("/ws", webSocketAdapter(lsServer));
-
-app.get("/", (req, res) => {
-  console.log("Hello World!");
-  res.send("Hello World!");
-});
+expressAdapter(app as any, lsServer);
 
 app.listen(process.env.PORT || 3333, () => {
   console.log(`Server running on port ${process.env.PORT || 3333}`);

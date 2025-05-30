@@ -1,11 +1,13 @@
 import { router as createRouter, routeFactory } from "@repo/live-state/server";
-import { issue } from "./schema";
+import { schema } from "./schema";
 
 const publicRoute = routeFactory();
 
 export const router = createRouter({
+  schema,
   routes: {
-    issues: publicRoute(issue),
+    organization: publicRoute(schema.organization),
+    organizationUser: publicRoute(schema.organizationUser),
   },
 });
 

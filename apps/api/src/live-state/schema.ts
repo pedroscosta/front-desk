@@ -1,10 +1,38 @@
-import { object, string } from "@repo/live-state";
+import {
+  createRelations,
+  createSchema,
+  id,
+  object,
+  reference,
+  string,
+} from "@repo/live-state";
 
-export const issue = object("issues", {
-  id: string(),
-  title: string(),
+const organization = object("organization", {
+  id: id(),
+  name: string(),
+  slug: string(),
 });
 
-export const schema = {
-  entities: [issue],
-};
+const organizationUser = object("organizationUser", {
+  id: id(),
+  organizationId: reference("organization.id"),
+  userId: reference("user.id"),
+});
+
+const organizationRelations = createRelations(organization, ({ many }) => ({
+  organizationUsers: many(organizationUser, "organizationId"),
+}));
+
+const organizationUserRelations = createRelations(
+  organizationUser,
+  ({ one }) => ({
+    organization: one(organization, "organizationId"),
+  })
+);
+
+export const schema = createSchema({
+  organization,
+  organizationUser,
+  organizationUserRelations,
+  organizationRelations,
+});
