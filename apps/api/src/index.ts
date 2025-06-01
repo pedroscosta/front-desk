@@ -38,7 +38,9 @@ app.all("/api/auth/*", toNodeHandler(auth));
 
 app.use(express.json());
 
-expressAdapter(app as any, lsServer);
+expressAdapter(app as any, lsServer, {
+  basePath: "/api/ls",
+});
 
 app.listen(process.env.PORT || 3333, () => {
   console.log(`Server running on port ${process.env.PORT || 3333}`);

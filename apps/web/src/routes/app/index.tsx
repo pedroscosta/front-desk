@@ -1,15 +1,12 @@
 import { useLiveQuery } from "@live-state/sync/client";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 import { Button } from "@workspace/ui/components/button";
+import { Suspense, use } from "react";
 import { ulid } from "ulid";
 import { store } from "~/lib/live-state";
-import { getAuthUser } from "~/lib/server-funcs/get-auth-user";
 
 export const Route = createFileRoute("/app/")({
   component: RouteComponent,
-  loader: async () => {
-    return getAuthUser();
-  },
 });
 
 function Organization({ id }: { id: string }) {
@@ -18,13 +15,19 @@ function Organization({ id }: { id: string }) {
   return <div>{JSON.stringify(org)}</div>;
 }
 
-function RouteComponent() {
-  const data = Route.useLoaderData();
+const OrganizationList = () => {
+  const { $organizations } = getRouteApi("/app").useLoaderData();
+  const organizations = use($organizations);
+  return <pre>{JSON.stringify(organizations)}</pre>;
+};
 
+function RouteComponent() {
   const orgs = useLiveQuery(store.organization);
   return (
     <div className="w-full h-dvh flex flex-col items-center justify-center">
-      {JSON.stringify(orgs)}
+      <Suspense fallback={<div>Loading organization...</div>}>
+        <OrganizationList />
+      </Suspense>
       {orgs &&
         Object.entries(orgs).map(([id, org]) => (
           <Organization key={id} id={id} />
@@ -38,7 +41,7 @@ function RouteComponent() {
           })
         }
       >
-        Add Organization{" "}
+        Add Organization
       </Button>
     </div>
   );

@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignUpImport } from './routes/sign-up'
+import { Route as OnboardingImport } from './routes/onboarding'
 import { Route as AppRouteImport } from './routes/app/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as AppIndexImport } from './routes/app/index'
@@ -24,6 +25,12 @@ import { Route as PathlessLayoutNestedLayoutRouteAImport } from './routes/_pathl
 const SignUpRoute = SignUpImport.update({
   id: '/sign-up',
   path: '/sign-up',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const OnboardingRoute = OnboardingImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -82,6 +89,13 @@ declare module '@tanstack/react-router' {
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingImport
       parentRoute: typeof rootRoute
     }
     '/sign-up': {
@@ -157,6 +171,7 @@ const PathlessLayoutNestedLayoutRouteWithChildren =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
+  '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
   '': typeof PathlessLayoutNestedLayoutRouteWithChildren
   '/app/': typeof AppIndexRoute
@@ -166,6 +181,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
   '': typeof PathlessLayoutNestedLayoutRouteWithChildren
   '/app': typeof AppIndexRoute
@@ -177,6 +193,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
+  '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
   '/_pathlessLayout/_nested-layout': typeof PathlessLayoutNestedLayoutRouteWithChildren
   '/app/': typeof AppIndexRoute
@@ -186,13 +203,22 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/sign-up' | '' | '/app/' | '/route-a' | '/route-b'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/onboarding'
+    | '/sign-up'
+    | ''
+    | '/app/'
+    | '/route-a'
+    | '/route-b'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sign-up' | '' | '/app' | '/route-a' | '/route-b'
+  to: '/' | '/onboarding' | '/sign-up' | '' | '/app' | '/route-a' | '/route-b'
   id:
     | '__root__'
     | '/'
     | '/app'
+    | '/onboarding'
     | '/sign-up'
     | '/_pathlessLayout/_nested-layout'
     | '/app/'
@@ -204,6 +230,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRouteRoute: typeof AppRouteRouteWithChildren
+  OnboardingRoute: typeof OnboardingRoute
   SignUpRoute: typeof SignUpRoute
   PathlessLayoutNestedLayoutRoute: typeof PathlessLayoutNestedLayoutRouteWithChildren
 }
@@ -211,6 +238,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRouteRoute: AppRouteRouteWithChildren,
+  OnboardingRoute: OnboardingRoute,
   SignUpRoute: SignUpRoute,
   PathlessLayoutNestedLayoutRoute: PathlessLayoutNestedLayoutRouteWithChildren,
 }
@@ -227,6 +255,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/app",
+        "/onboarding",
         "/sign-up",
         "/_pathlessLayout/_nested-layout"
       ]
@@ -239,6 +268,9 @@ export const routeTree = rootRoute
       "children": [
         "/app/"
       ]
+    },
+    "/onboarding": {
+      "filePath": "onboarding.tsx"
     },
     "/sign-up": {
       "filePath": "sign-up.tsx"
