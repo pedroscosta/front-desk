@@ -29,14 +29,12 @@
     "format": "pnpm biome format ./src --fix"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
     "@types/cors": "^2.8.18",
     "@types/express": "^4.17.21",
     "@types/node": "^22.15.2",
     "@types/pg": "^8.11.14",
     "tsdown": "^0.10.2",
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.3"
+    "tsx": "^4.19.3"
   },
   "engines": {
     "node": ">=20.18.0"
@@ -48,6 +46,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
-    "pg": "^8.15.6"
+    "pg": "^8.15.6",
+    "ulid": "^3.0.0",
+    "zod": "^3.24.2"
   }
 }

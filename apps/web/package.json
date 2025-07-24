@@ -37,7 +37,6 @@
     "@types/react-dom": "^19.0.3",
     "postcss": "^8.5.1",
     "tailwindcss": "^4.1.6",
-    "typescript": "^5.7.2",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }
