@@ -1,6 +1,6 @@
 import "./env";
 
-import { SQLStorage, expressAdapter, server } from "@repo/live-state/server";
+import { expressAdapter, server, SQLStorage } from "@repo/live-state/server";
 import expressWs from "@wll8/express-ws";
 import { toNodeHandler } from "better-auth/node";
 import cors from "cors";
@@ -32,6 +32,27 @@ const lsServer = server({
     })
   ),
   schema,
+  contextProvider: async ({ transport, headers, query }) => {
+    if (transport === "WEBSOCKET") {
+      if (!query.token) return;
+
+      return {
+        ...(await auth.api.verifyOneTimeToken({
+          body: {
+            token: query.token,
+          },
+        })),
+      };
+    }
+
+    const session = await auth.api.getSession({
+      headers: new Headers(headers),
+    });
+
+    return {
+      ...session,
+    };
+  },
 });
 
 app.all("/api/auth/*", toNodeHandler(auth));

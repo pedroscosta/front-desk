@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import { oneTimeToken } from "better-auth/plugins";
 import { Pool } from "pg";
 import "../env";
 
@@ -10,6 +11,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  plugins: [oneTimeToken()],
 });
 
 export const getSession = async (req: { headers: Record<string, any> }) => {
