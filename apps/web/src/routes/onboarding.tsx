@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button } from "@workspace/ui/components/button";
 import {
   FormControl,
@@ -12,6 +12,7 @@ import { Icon } from "@workspace/ui/components/logo";
 import { Spinner } from "@workspace/ui/components/spinner";
 import { useState } from "react";
 import { z } from "zod";
+import { store } from "~/lib/live-state";
 
 export const Route = createFileRoute("/onboarding")({
   component: RouteComponent,
@@ -32,6 +33,7 @@ const onboardingFormSchema = z.object({
 });
 
 function OnboardingForm() {
+  const navigate = useNavigate();
   // Function to convert organization name to slug format
   const generateSlug = (name: string): string => {
     return name
@@ -56,14 +58,18 @@ function OnboardingForm() {
         onSubmit: onboardingFormSchema,
       },
       onSubmit: async ({ value }) => {
-        // Here you would handle the submission to create the organization
-        // and invite team members
         try {
-          // TODO: Implement API call to create organization and invite members
           setLoading(true);
           console.log("Form submitted with values:", value);
-          // await createOrganization(value);
+
+          // TODO change this to a fetch call
+          await store.organization.create({
+            name: value.organizationName,
+            slug: value.organizationSlug,
+          });
+
           setLoading(false);
+          navigate({ to: "/app" });
         } catch (err) {
           console.error("Error creating organization:", err);
           setLoading(false);
