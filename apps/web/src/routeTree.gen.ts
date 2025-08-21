@@ -16,9 +16,6 @@ import { Route as OnboardingImport } from './routes/onboarding'
 import { Route as AppRouteImport } from './routes/app/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as AppIndexImport } from './routes/app/index'
-import { Route as PathlessLayoutNestedLayoutImport } from './routes/_pathlessLayout/_nested-layout'
-import { Route as PathlessLayoutNestedLayoutRouteBImport } from './routes/_pathlessLayout/_nested-layout/route-b'
-import { Route as PathlessLayoutNestedLayoutRouteAImport } from './routes/_pathlessLayout/_nested-layout/route-a'
 
 // Create/Update Routes
 
@@ -52,27 +49,6 @@ const AppIndexRoute = AppIndexImport.update({
   getParentRoute: () => AppRouteRoute,
 } as any)
 
-const PathlessLayoutNestedLayoutRoute = PathlessLayoutNestedLayoutImport.update(
-  {
-    id: '/_pathlessLayout/_nested-layout',
-    getParentRoute: () => rootRoute,
-  } as any,
-)
-
-const PathlessLayoutNestedLayoutRouteBRoute =
-  PathlessLayoutNestedLayoutRouteBImport.update({
-    id: '/route-b',
-    path: '/route-b',
-    getParentRoute: () => PathlessLayoutNestedLayoutRoute,
-  } as any)
-
-const PathlessLayoutNestedLayoutRouteARoute =
-  PathlessLayoutNestedLayoutRouteAImport.update({
-    id: '/route-a',
-    path: '/route-a',
-    getParentRoute: () => PathlessLayoutNestedLayoutRoute,
-  } as any)
-
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -105,33 +81,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignUpImport
       parentRoute: typeof rootRoute
     }
-    '/_pathlessLayout/_nested-layout': {
-      id: '/_pathlessLayout/_nested-layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof PathlessLayoutNestedLayoutImport
-      parentRoute: typeof rootRoute
-    }
     '/app/': {
       id: '/app/'
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexImport
       parentRoute: typeof AppRouteImport
-    }
-    '/_pathlessLayout/_nested-layout/route-a': {
-      id: '/_pathlessLayout/_nested-layout/route-a'
-      path: '/route-a'
-      fullPath: '/route-a'
-      preLoaderRoute: typeof PathlessLayoutNestedLayoutRouteAImport
-      parentRoute: typeof PathlessLayoutNestedLayoutImport
-    }
-    '/_pathlessLayout/_nested-layout/route-b': {
-      id: '/_pathlessLayout/_nested-layout/route-b'
-      path: '/route-b'
-      fullPath: '/route-b'
-      preLoaderRoute: typeof PathlessLayoutNestedLayoutRouteBImport
-      parentRoute: typeof PathlessLayoutNestedLayoutImport
     }
   }
 }
@@ -150,43 +105,19 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
   AppRouteRouteChildren,
 )
 
-interface PathlessLayoutNestedLayoutRouteChildren {
-  PathlessLayoutNestedLayoutRouteARoute: typeof PathlessLayoutNestedLayoutRouteARoute
-  PathlessLayoutNestedLayoutRouteBRoute: typeof PathlessLayoutNestedLayoutRouteBRoute
-}
-
-const PathlessLayoutNestedLayoutRouteChildren: PathlessLayoutNestedLayoutRouteChildren =
-  {
-    PathlessLayoutNestedLayoutRouteARoute:
-      PathlessLayoutNestedLayoutRouteARoute,
-    PathlessLayoutNestedLayoutRouteBRoute:
-      PathlessLayoutNestedLayoutRouteBRoute,
-  }
-
-const PathlessLayoutNestedLayoutRouteWithChildren =
-  PathlessLayoutNestedLayoutRoute._addFileChildren(
-    PathlessLayoutNestedLayoutRouteChildren,
-  )
-
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
-  '': typeof PathlessLayoutNestedLayoutRouteWithChildren
   '/app/': typeof AppIndexRoute
-  '/route-a': typeof PathlessLayoutNestedLayoutRouteARoute
-  '/route-b': typeof PathlessLayoutNestedLayoutRouteBRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
-  '': typeof PathlessLayoutNestedLayoutRouteWithChildren
   '/app': typeof AppIndexRoute
-  '/route-a': typeof PathlessLayoutNestedLayoutRouteARoute
-  '/route-b': typeof PathlessLayoutNestedLayoutRouteBRoute
 }
 
 export interface FileRoutesById {
@@ -195,35 +126,15 @@ export interface FileRoutesById {
   '/app': typeof AppRouteRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
-  '/_pathlessLayout/_nested-layout': typeof PathlessLayoutNestedLayoutRouteWithChildren
   '/app/': typeof AppIndexRoute
-  '/_pathlessLayout/_nested-layout/route-a': typeof PathlessLayoutNestedLayoutRouteARoute
-  '/_pathlessLayout/_nested-layout/route-b': typeof PathlessLayoutNestedLayoutRouteBRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/app'
-    | '/onboarding'
-    | '/sign-up'
-    | ''
-    | '/app/'
-    | '/route-a'
-    | '/route-b'
+  fullPaths: '/' | '/app' | '/onboarding' | '/sign-up' | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/onboarding' | '/sign-up' | '' | '/app' | '/route-a' | '/route-b'
-  id:
-    | '__root__'
-    | '/'
-    | '/app'
-    | '/onboarding'
-    | '/sign-up'
-    | '/_pathlessLayout/_nested-layout'
-    | '/app/'
-    | '/_pathlessLayout/_nested-layout/route-a'
-    | '/_pathlessLayout/_nested-layout/route-b'
+  to: '/' | '/onboarding' | '/sign-up' | '/app'
+  id: '__root__' | '/' | '/app' | '/onboarding' | '/sign-up' | '/app/'
   fileRoutesById: FileRoutesById
 }
 
@@ -232,7 +143,6 @@ export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
   SignUpRoute: typeof SignUpRoute
-  PathlessLayoutNestedLayoutRoute: typeof PathlessLayoutNestedLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -240,7 +150,6 @@ const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
   SignUpRoute: SignUpRoute,
-  PathlessLayoutNestedLayoutRoute: PathlessLayoutNestedLayoutRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -256,8 +165,7 @@ export const routeTree = rootRoute
         "/",
         "/app",
         "/onboarding",
-        "/sign-up",
-        "/_pathlessLayout/_nested-layout"
+        "/sign-up"
       ]
     },
     "/": {
@@ -275,24 +183,9 @@ export const routeTree = rootRoute
     "/sign-up": {
       "filePath": "sign-up.tsx"
     },
-    "/_pathlessLayout/_nested-layout": {
-      "filePath": "_pathlessLayout/_nested-layout.tsx",
-      "children": [
-        "/_pathlessLayout/_nested-layout/route-a",
-        "/_pathlessLayout/_nested-layout/route-b"
-      ]
-    },
     "/app/": {
       "filePath": "app/index.tsx",
       "parent": "/app"
-    },
-    "/_pathlessLayout/_nested-layout/route-a": {
-      "filePath": "_pathlessLayout/_nested-layout/route-a.tsx",
-      "parent": "/_pathlessLayout/_nested-layout"
-    },
-    "/_pathlessLayout/_nested-layout/route-b": {
-      "filePath": "_pathlessLayout/_nested-layout/route-b.tsx",
-      "parent": "/_pathlessLayout/_nested-layout"
     }
   }
 }

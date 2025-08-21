@@ -20,6 +20,8 @@
     "@workspace/ui": "workspace:*",
     "api": "workspace:*",
     "better-auth": "^1.2.7",
+    "jotai": "^2.13.1",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.475.0",
     "next-themes": "^0.4.4",
     "react": "^19.0.0",
@@ -32,6 +34,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.6",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.5.4",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",

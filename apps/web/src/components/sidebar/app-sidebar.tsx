@@ -4,13 +4,13 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@workspace/ui/components/sidebar";
-import { TeamSwitcher } from "./team-switcher";
+import { OrgSwitcher } from "./organization-switcher";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="inset" className="bg-none">
       <SidebarHeader className="bg-none">
-        <TeamSwitcher />
+        <OrgSwitcher />
         {/* <NavMain items={data.navMain} /> */}
       </SidebarHeader>
       <SidebarContent className="bg-none">

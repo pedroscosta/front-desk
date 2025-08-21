@@ -11,6 +11,9 @@ export const { client, store } = createClient<Router>({
   credentials: async () => ({
     token: (await authClient.oneTimeToken.generate()).data?.token ?? "",
   }),
+  storage: {
+    name: "frontdesk",
+  },
 });
 
 export const fetchClient = createFetchClient<Router>({
