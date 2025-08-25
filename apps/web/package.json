@@ -27,6 +27,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.3",
+    "react-hotkeys-hook": "^5.1.0",
     "tailwind-merge": "^2.6.0",
     "ulid": "^3.0.0",
     "vinxi": "0.5.3",
