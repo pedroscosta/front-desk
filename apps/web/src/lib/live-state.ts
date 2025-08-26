@@ -18,7 +18,7 @@ export const { client, store } = createClient<Router>({
 });
 
 export const fetchClient = createFetchClient<Router>({
-  url: "http://localhost:3333/api/ls",
+  url: "http://localhost:3000/api/ls",
   schema,
   credentials: createIsomorphicFn()
     .server(() => getHeaders() as Record<string, string>)
