@@ -39,7 +39,7 @@ function RouteComponent() {
     <div className="w-screen h-screen flex">
       <AppSidebar />
       <div className="h-full flex-1 shrink p-2 pl-0 relative">
-        <Card className="size-full">
+        <Card className="size-full bg-muted/30">
           <Outlet />
         </Card>
       </div>
