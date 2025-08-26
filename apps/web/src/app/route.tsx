@@ -8,11 +8,13 @@ export const Route = createFileRoute("/app")({
   component: RouteComponent,
   loader: async () => {
     const user = await getAuthUser();
+
     if (!user) {
       throw redirect({
         to: "/",
       });
     }
+
     const orgUsers = await fetchClient.organizationUser
       .get({
         include: {

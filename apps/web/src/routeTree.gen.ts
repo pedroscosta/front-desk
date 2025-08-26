@@ -8,90 +8,114 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignUpRouteImport } from './routes/sign-up'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as AppRouteRouteImport } from './routes/app/route'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppIndexRouteImport } from './routes/app/index'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as SignUpImport } from './routes/sign-up'
-import { Route as OnboardingImport } from './routes/onboarding'
-import { Route as AppRouteImport } from './routes/app/route'
-import { Route as IndexImport } from './routes/index'
-import { Route as AppIndexImport } from './routes/app/index'
-
-// Create/Update Routes
-
-const SignUpRoute = SignUpImport.update({
+const SignUpRoute = SignUpRouteImport.update({
   id: '/sign-up',
   path: '/sign-up',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const OnboardingRoute = OnboardingImport.update({
+const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AppRouteRoute = AppRouteImport.update({
+const AppRouteRoute = AppRouteRouteImport.update({
   id: '/app',
   path: '/app',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AppIndexRoute = AppIndexImport.update({
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRouteRoute,
 } as any)
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/onboarding': typeof OnboardingRoute
+  '/sign-up': typeof SignUpRoute
+  '/app/': typeof AppIndexRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/onboarding': typeof OnboardingRoute
+  '/sign-up': typeof SignUpRoute
+  '/app': typeof AppIndexRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/onboarding': typeof OnboardingRoute
+  '/sign-up': typeof SignUpRoute
+  '/app/': typeof AppIndexRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/app' | '/onboarding' | '/sign-up' | '/app/'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/onboarding' | '/sign-up' | '/app'
+  id: '__root__' | '/' | '/app' | '/onboarding' | '/sign-up' | '/app/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
+  OnboardingRoute: typeof OnboardingRoute
+  SignUpRoute: typeof SignUpRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/app': {
-      id: '/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AppRouteImport
-      parentRoute: typeof rootRoute
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
       fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/sign-up': {
-      id: '/sign-up'
-      path: '/sign-up'
-      fullPath: '/sign-up'
-      preLoaderRoute: typeof SignUpImport
-      parentRoute: typeof rootRoute
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/app/': {
       id: '/app/'
       path: '/'
       fullPath: '/app/'
-      preLoaderRoute: typeof AppIndexImport
-      parentRoute: typeof AppRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
     }
   }
 }
-
-// Create and export the route tree
 
 interface AppRouteRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
@@ -105,88 +129,12 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
   AppRouteRouteChildren,
 )
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/app': typeof AppRouteRouteWithChildren
-  '/onboarding': typeof OnboardingRoute
-  '/sign-up': typeof SignUpRoute
-  '/app/': typeof AppIndexRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/onboarding': typeof OnboardingRoute
-  '/sign-up': typeof SignUpRoute
-  '/app': typeof AppIndexRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/app': typeof AppRouteRouteWithChildren
-  '/onboarding': typeof OnboardingRoute
-  '/sign-up': typeof SignUpRoute
-  '/app/': typeof AppIndexRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/onboarding' | '/sign-up' | '/app/'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/onboarding' | '/sign-up' | '/app'
-  id: '__root__' | '/' | '/app' | '/onboarding' | '/sign-up' | '/app/'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AppRouteRoute: typeof AppRouteRouteWithChildren
-  OnboardingRoute: typeof OnboardingRoute
-  SignUpRoute: typeof SignUpRoute
-}
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRouteRoute: AppRouteRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
   SignUpRoute: SignUpRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/app",
-        "/onboarding",
-        "/sign-up"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/app": {
-      "filePath": "app/route.tsx",
-      "children": [
-        "/app/"
-      ]
-    },
-    "/onboarding": {
-      "filePath": "onboarding.tsx"
-    },
-    "/sign-up": {
-      "filePath": "sign-up.tsx"
-    },
-    "/app/": {
-      "filePath": "app/index.tsx",
-      "parent": "/app"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

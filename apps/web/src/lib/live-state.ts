@@ -1,5 +1,6 @@
 import { createClient } from "@live-state/sync/client";
 import { createClient as createFetchClient } from "@live-state/sync/client/fetch";
+import { createIsomorphicFn } from "@tanstack/react-start";
 import { getHeaders } from "@tanstack/react-start/server";
 import type { Router } from "api/router";
 import { schema } from "api/schema";
@@ -19,8 +20,7 @@ export const { client, store } = createClient<Router>({
 export const fetchClient = createFetchClient<Router>({
   url: "http://localhost:3333/api/ls",
   schema,
-  credentials: () =>
-    typeof window === "undefined"
-      ? (getHeaders() as Record<string, string>)
-      : {},
+  credentials: createIsomorphicFn()
+    .server(() => getHeaders() as Record<string, string>)
+    .client(() => ({})),
 });
