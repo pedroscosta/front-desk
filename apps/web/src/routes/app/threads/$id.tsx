@@ -46,7 +46,7 @@ function RouteComponent() {
       <CardHeader>
         <CardTitle className="text-center">{thread?.name}</CardTitle>
       </CardHeader>
-      <div className="flex flex-col p-4 gap-4">
+      <div className="flex flex-col p-4 gap-4 flex-1 overflow-y-auto">
         {thread?.messages.map((message) => (
           <Card
             key={message.id}

@@ -36,13 +36,11 @@ export const Route = createFileRoute("/app")({
 
 function RouteComponent() {
   return (
-    <div className="w-screen h-screen flex">
+    <div className="w-screen h-screen flex overflow-hidden">
       <AppSidebar />
-      <div className="h-full flex-1 shrink p-2 pl-0 relative">
-        <Card className="size-full bg-muted/30">
-          <Outlet />
-        </Card>
-      </div>
+      <Card className="flex-1 bg-muted/30 relative m-2 ml-0">
+        <Outlet />
+      </Card>
     </div>
   );
 }
