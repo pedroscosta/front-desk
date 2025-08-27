@@ -70,6 +70,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@faker-js/faker':
+        specifier: ^10.0.0
+        version: 10.0.0
       '@live-state/sync':
         specifier: link:/Users/pedroscosta/projects/sync-poc/packages/live-state
         version: link:../../../sync-poc/packages/live-state
@@ -94,6 +97,9 @@ importers:
       better-auth:
         specifier: ^1.2.7
         version: 1.2.7
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       jotai:
         specifier: ^2.13.1
         version: 2.13.1(@babel/core@7.28.3)(@babel/template@7.27.2)(@types/react@19.1.2)(react@19.1.0)
@@ -1191,6 +1197,10 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@faker-js/faker@10.0.0':
+    resolution: {integrity: sha512-UollFEUkVXutsaP+Vndjxar40Gs5JL2HeLcl8xO1QAjJgOdhc3OmBFWyEylS+RddWaaBiAzH+5/17PLQJwDiLw==}
+    engines: {node: ^20.19.0 || ^22.13.0 || ^23.5.0 || >=24.0.0, npm: '>=10'}
 
   '@fastify/busboy@3.2.0':
     resolution: {integrity: sha512-m9FVDXU3GT2ITSe0UaMA5rU3QkfC/UXtCU8y0gSN/GugTqtVldOBWIB5V6V3sbmenVZUIpU6f+mPEO2+m5iTaA==}
@@ -7466,6 +7476,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.9':
     optional: true
+
+  '@faker-js/faker@10.0.0': {}
 
   '@fastify/busboy@3.2.0': {}
 
