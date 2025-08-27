@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build && tsc --noEmit",
-    "start": "node .output/server/index.mjs"
+    "start": "NODE_ENV=production node .output/server/index.mjs"
   },
   "dependencies": {
+    "@faker-js/faker": "^10.0.0",
     "@live-state/sync": "link:/Users/pedroscosta/projects/sync-poc/packages/live-state",
     "@tanstack/react-form": "^1.11.1",
     "@tanstack/react-router": "^1.131.27",
@@ -17,6 +18,7 @@
     "@workspace/ui": "workspace:*",
     "api": "workspace:*",
     "better-auth": "^1.2.7",
+    "date-fns": "^4.1.0",
     "jotai": "^2.13.1",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.475.0",

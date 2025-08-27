@@ -15,6 +15,7 @@ import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppThreadsIndexRouteImport } from './routes/app/threads/index'
+import { Route as AppThreadsIdRouteImport } from './routes/app/threads/$id'
 
 const SignUpRoute = SignUpRouteImport.update({
   id: '/sign-up',
@@ -46,6 +47,11 @@ const AppThreadsIndexRoute = AppThreadsIndexRouteImport.update({
   path: '/threads/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppThreadsIdRoute = AppThreadsIdRouteImport.update({
+  id: '/threads/$id',
+  path: '/threads/$id',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
   '/app/': typeof AppIndexRoute
+  '/app/threads/$id': typeof AppThreadsIdRoute
   '/app/threads': typeof AppThreadsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
   '/app': typeof AppIndexRoute
+  '/app/threads/$id': typeof AppThreadsIdRoute
   '/app/threads': typeof AppThreadsIndexRoute
 }
 export interface FileRoutesById {
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
   '/app/': typeof AppIndexRoute
+  '/app/threads/$id': typeof AppThreadsIdRoute
   '/app/threads/': typeof AppThreadsIndexRoute
 }
 export interface FileRouteTypes {
@@ -79,9 +88,16 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/sign-up'
     | '/app/'
+    | '/app/threads/$id'
     | '/app/threads'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/onboarding' | '/sign-up' | '/app' | '/app/threads'
+  to:
+    | '/'
+    | '/onboarding'
+    | '/sign-up'
+    | '/app'
+    | '/app/threads/$id'
+    | '/app/threads'
   id:
     | '__root__'
     | '/'
@@ -89,6 +105,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/sign-up'
     | '/app/'
+    | '/app/threads/$id'
     | '/app/threads/'
   fileRoutesById: FileRoutesById
 }
@@ -143,16 +160,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppThreadsIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/threads/$id': {
+      id: '/app/threads/$id'
+      path: '/threads/$id'
+      fullPath: '/app/threads/$id'
+      preLoaderRoute: typeof AppThreadsIdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
   }
 }
 
 interface AppRouteRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
+  AppThreadsIdRoute: typeof AppThreadsIdRoute
   AppThreadsIndexRoute: typeof AppThreadsIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppIndexRoute: AppIndexRoute,
+  AppThreadsIdRoute: AppThreadsIdRoute,
   AppThreadsIndexRoute: AppThreadsIndexRoute,
 }
 

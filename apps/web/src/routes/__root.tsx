@@ -5,11 +5,11 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import appCss from "@workspace/ui/globals.css?url";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
 import { NotFound } from "~/components/NotFound";
 import { Providers } from "~/components/providers";
 import { seo } from "~/utils/seo";
+import "../../../../packages/ui/src/styles/globals.css";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -29,7 +29,7 @@ export const Route = createRootRoute({
       }),
     ],
     links: [
-      { rel: "stylesheet", href: appCss },
+      // { rel: "stylesheet", href: appCss },
       {
         rel: "apple-touch-icon",
         sizes: "180x180",
@@ -77,7 +77,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="w-screen min-h-screen">
+      <body className="w-screen min-h-screen text-sm">
         <Providers>
           {children}
           <TanStackRouterDevtools position="bottom-right" />
