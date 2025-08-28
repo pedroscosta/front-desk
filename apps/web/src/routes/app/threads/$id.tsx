@@ -53,25 +53,27 @@ function RouteComponent() {
       </CardHeader>
       <div className="flex flex-col p-4 gap-4 flex-1 w-full max-w-5xl mx-auto overflow-hidden">
         <div className="p-4 flex-1 flex flex-col gap-4 overflow-y-auto">
-          {thread?.messages.map((message) => (
-            <Card
-              key={message.id}
-              className="relative before:w-[1px] before:h-4 before:left-4 before:absolute before:-top-4 not-first:before:bg-border"
-            >
-              <CardHeader size="sm">
-                <CardTitle>
-                  <Avatar className="size-5">
-                    <AvatarFallback>{message.author[0]}</AvatarFallback>
-                  </Avatar>
-                  <p>{message.author}</p>
-                  <p className="text-muted-foreground">
-                    {formatRelativeTime(message.createdAt as Date)}
-                  </p>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>{message.content}</CardContent>
-            </Card>
-          ))}
+          {thread?.messages
+            .sort((a, b) => a.id.localeCompare(b.id))
+            .map((message) => (
+              <Card
+                key={message.id}
+                className="relative before:w-[1px] before:h-4 before:left-4 before:absolute before:-top-4 not-first:before:bg-border"
+              >
+                <CardHeader size="sm">
+                  <CardTitle>
+                    <Avatar className="size-5">
+                      <AvatarFallback>{message.author[0]}</AvatarFallback>
+                    </Avatar>
+                    <p>{message.author}</p>
+                    <p className="text-muted-foreground">
+                      {formatRelativeTime(message.createdAt as Date)}
+                    </p>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>{message.content}</CardContent>
+              </Card>
+            ))}
           <div ref={bottomRef} className="-mt-4" />
         </div>
         <InputBox
