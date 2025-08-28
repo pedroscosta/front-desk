@@ -22,9 +22,6 @@ function RouteComponent() {
   // const orgObj = useLiveQuery(store.organization);
   const orgObj = useLiveQuery(store.organization[currentOrg!.id]);
   const threads = orgObj?.threads ?? [];
-  const messages = useLiveQuery(store.message);
-
-  console.log(messages);
 
   return (
     <div>
