@@ -49,7 +49,7 @@ function RouteComponent() {
   return (
     <>
       <CardHeader>
-        <CardTitle className="text-center">{thread?.name}</CardTitle>
+        <CardTitle className="justify-self-center">{thread?.name}</CardTitle>
       </CardHeader>
       <div className="flex flex-col p-4 gap-4 flex-1 w-full max-w-5xl mx-auto overflow-hidden">
         <div className="p-4 flex-1 flex flex-col gap-4 overflow-y-auto">
