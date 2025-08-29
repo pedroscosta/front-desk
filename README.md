@@ -1,7 +1,7 @@
 # Front Desk
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/yourusername/front-desk/pulls)
+[![License: AGPL](https://img.shields.io/badge/License-AGPL-brightgreen.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/pedroscosta/front-desk/pulls)
 
 Front Desk is an open-source customer support platform designed to allow you to help your customers wherever they are. Built with design as a first-class citizen, it provides a seamless and super fast experience.
 
