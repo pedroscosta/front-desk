@@ -56,7 +56,7 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       '@types/node':
-        specifier: ^22.15.2
+        specifier: ^22.15.3
         version: 22.15.3
       '@types/pg':
         specifier: ^8.11.14
@@ -70,6 +70,12 @@ importers:
 
   apps/discord:
     dependencies:
+      '@live-state/sync':
+        specifier: link:/Users/pedroscosta/projects/sync-poc/packages/live-state
+        version: link:../../../sync-poc/packages/live-state
+      api:
+        specifier: workspace:*
+        version: link:../api
       discord.js:
         specifier: ^14.22.1
         version: 14.22.1

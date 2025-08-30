@@ -27,6 +27,8 @@
   "dependencies": {
     "discord.js": "^14.22.1",
     "dotenv": "^16.5.0",
-    "ulid": "^3.0.0"
+    "ulid": "^3.0.0",
+    "@live-state/sync": "link:/Users/pedroscosta/projects/sync-poc/packages/live-state",
+    "api": "workspace:*"
   }
 }

@@ -7,7 +7,7 @@ export default defineConfig({
     "./src/live-state/schema.ts",
   ],
   target: "node20.18",
-  clean: true,
+  clean: (process.env.NODE_ENV ?? "development") !== "development",
   dts: false,
   platform: "node",
 });

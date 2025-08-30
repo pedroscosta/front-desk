@@ -34,6 +34,12 @@ const lsServer = server({
   schema,
   contextProvider: async ({ transport, headers, query }) => {
     if (transport === "WEBSOCKET") {
+      if (query.discordBotKey) {
+        return {
+          discordBotKey: query.discordBotKey,
+        };
+      }
+
       if (!query.token) return;
 
       return {
