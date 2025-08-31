@@ -2,9 +2,10 @@ import "./env";
 
 import type { InferLiveObject } from "@live-state/sync";
 import type { schema } from "api/schema";
-import { Client, GatewayIntentBits } from "discord.js";
+import { Client, GatewayIntentBits, TextChannel } from "discord.js";
 import { ulid } from "ulid";
 import { store } from "./lib/live-state";
+import { getOrCreateWebhook } from "./utils";
 
 const client = new Client({
   intents: [
@@ -87,6 +88,7 @@ client.on("messageCreate", async (message) => {
       createdAt: new Date(),
       discordChannelId: message.channel.id,
     });
+    await new Promise((resolve) => setTimeout(resolve, 150)); // TODO debug this issue
   } else {
     const thread = Object.values((store.thread as any).get()).find(
       (t: any) => t.discordChannelId === message.channel.id
@@ -96,22 +98,7 @@ client.on("messageCreate", async (message) => {
     threadId = thread.id;
   }
 
-  // Example: Respond to a specific message using webhook
-
-  // try {
-  // const webhookClient = await getOrCreateWebhook(message.channel);
-  // await webhookClient.send({
-  //   content: `Pong! 🏓 (from ${message.author.username})`,
-  //   threadId: message.channel.isThread() ? message.channel.id : undefined,
-  //   username: message.author.username,
-  //   avatarURL: message.author.displayAvatarURL(),
-  // });
-  // } catch (error) {
-  //   console.error("Error sending webhook message:", error);
-  //   // Fallback to regular message if webhook fails
-  //   await message.reply(`Pong! 🏓 (from ${message.author.username})`);
-  // }
-
+  console.info("Thread ID:", threadId);
   if (!threadId) return;
 
   store.message.insert({
@@ -121,8 +108,57 @@ client.on("messageCreate", async (message) => {
     content: message.content,
     createdAt: message.createdAt,
     origin: "discord",
-    originalMessageId: message.id,
+    externalMessageId: message.id,
   });
+  console.info("Message inserted:", message);
+});
+
+store.message.subscribe(async () => {
+  const threads = store.thread.get() as Record<
+    string,
+    InferLiveObject<typeof schema.thread>
+  >;
+
+  const messages = Object.values(
+    store.message.get() as Record<
+      string,
+      InferLiveObject<typeof schema.message>
+    >
+  ).filter(
+    (m) => threads[m.threadId]?.discordChannelId && !m.externalMessageId
+  );
+
+  console.info("Messages to send:", messages);
+
+  for (const message of messages) {
+    const channelId = threads[message.threadId]!.discordChannelId!;
+
+    console.info("Channel ID:", channelId);
+
+    if (!channelId) continue;
+
+    const channel = client.guilds.cache
+      .values()
+      .next()
+      ?.value?.channels.cache.get(channelId);
+    console.info("Channel:", channel);
+    if (!channel) continue;
+
+    try {
+      const webhookClient = await getOrCreateWebhook(channel as TextChannel);
+      const webhookMessage = await webhookClient.send({
+        content: message.content,
+        threadId: channel.id,
+        username: message.author,
+        // avatarURL: message.author.displayAvatarURL(),
+      });
+      store.message.update(message.id, {
+        externalMessageId: webhookMessage.id,
+      });
+    } catch (error) {
+      console.error("Error sending webhook message:", error);
+    }
+  }
 });
 
 client.login(token).catch(console.error);

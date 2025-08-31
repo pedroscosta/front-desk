@@ -38,7 +38,7 @@ const message = object("message", {
   content: string(),
   createdAt: timestamp(),
   origin: string().optional(),
-  originalMessageId: string().optional(),
+  externalMessageId: string().optional(),
 });
 
 const organizationRelations = createRelations(organization, ({ many }) => ({

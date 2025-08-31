@@ -5,7 +5,7 @@ const webhookClients = new Map<string, WebhookClient>();
 /**
  * Gets or creates a webhook for a specific channel
  */
-async function getOrCreateWebhook(
+export async function getOrCreateWebhook(
   channel: TextChannel | ThreadChannel
 ): Promise<WebhookClient> {
   // Check if we already have a webhook client for this channel
