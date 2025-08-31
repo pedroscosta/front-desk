@@ -44,10 +44,11 @@ This project is built with a monorepo structure, using Turborepo and pnpm. Here 
 ```
 front-desk/
 ├── apps/
-│   ├── api/         # Backend API (NestJS)
-│   └── web/         # Frontend (React + Vite)
+│   ├── api/         # Backend API (live-state + Express)
+│   └── discord/     # Discord bot
+│   └── web/         # Frontend (live-state + TanStack Start)
 ├── packages/
-│   └── ui/          # Shared UI components
+│   └── ui/          # Shared UI components (shadcn)
 └── docker-compose.yaml
 ```
 
