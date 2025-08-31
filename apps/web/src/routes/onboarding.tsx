@@ -60,7 +60,6 @@ function OnboardingForm() {
       onSubmit: async ({ value }) => {
         try {
           setLoading(true);
-          console.log("Form submitted with values:", value);
 
           // TODO change this to a fetch call
           await store.organization.create({

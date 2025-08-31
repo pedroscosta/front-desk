@@ -6,7 +6,7 @@ import { schema } from "./schema";
 const publicRoute = routeFactory();
 
 const privateRoute = publicRoute.use(async ({ req, next }) => {
-  if (!req.context.session) {
+  if (!req.context.session && !req.context.discordBotKey) {
     throw new Error("Unauthorized");
   }
 

@@ -28,6 +28,7 @@ const thread = object("thread", {
   organizationId: reference("organization.id"),
   name: string(),
   createdAt: timestamp(),
+  discordChannelId: string().optional(),
 });
 
 const message = object("message", {
@@ -36,6 +37,8 @@ const message = object("message", {
   author: string(),
   content: string(),
   createdAt: timestamp(),
+  origin: string().optional(),
+  externalMessageId: string().optional(),
 });
 
 const organizationRelations = createRelations(organization, ({ many }) => ({
