@@ -28,6 +28,7 @@ const thread = object("thread", {
   organizationId: reference("organization.id"),
   name: string(),
   createdAt: timestamp(),
+  discordChannelId: string().optional(),
 });
 
 const message = object("message", {

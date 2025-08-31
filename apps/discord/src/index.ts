@@ -1,12 +1,6 @@
 import "./env";
 
-import {
-  Client,
-  GatewayIntentBits,
-  TextChannel,
-  ThreadChannel,
-  WebhookClient,
-} from "discord.js";
+import { Client, GatewayIntentBits } from "discord.js";
 import { ulid } from "ulid";
 import { store } from "./lib/live-state";
 
@@ -27,58 +21,9 @@ if (!token) {
   process.exit(1);
 }
 
-// console.log = () => {}; // disable console.log for now
-
 store.message.subscribe(() => {
   console.info(store.message.get());
 });
-
-// Map to store webhook clients for each channel
-const webhookClients = new Map<string, WebhookClient>();
-
-/**
- * Gets or creates a webhook for a specific channel
- */
-async function getOrCreateWebhook(
-  channel: TextChannel | ThreadChannel
-): Promise<WebhookClient> {
-  // Check if we already have a webhook client for this channel
-  const existingWebhook = webhookClients.get(channel.id);
-  if (existingWebhook) {
-    return existingWebhook;
-  }
-
-  try {
-    // For threads, get the parent channel
-    const targetChannel = "parent" in channel ? channel.parent : channel;
-    if (!targetChannel || !(targetChannel instanceof TextChannel)) {
-      throw new Error("Could not get parent text channel for thread");
-    }
-
-    // Check if there's a webhook we can use
-    const webhooks = await targetChannel.fetchWebhooks();
-    let webhook = webhooks.find((w) => w.owner?.id === channel.client.user?.id);
-
-    // If no webhook exists, create one
-    if (!webhook) {
-      webhook = await targetChannel.createWebhook({
-        name: "Front Desk Bot",
-        avatar: channel.client.user?.displayAvatarURL(),
-        reason: "Auto-created webhook for thread management",
-      });
-    }
-
-    const webhookClient = new WebhookClient({ url: webhook.url });
-    webhookClients.set(channel.id, webhookClient);
-    return webhookClient;
-  } catch (error) {
-    console.error(
-      `Error getting/creating webhook for channel ${channel.id}:`,
-      error
-    );
-    throw error;
-  }
-}
 
 // client.once("ready", async () => {
 //   if (!client.user) return;
@@ -119,24 +64,29 @@ client.on("error", (error) => {
   console.error("Discord client error:", error);
 });
 
-// // Listen for new threads
-// client.on("threadCreate", async (thread) => {
-//   console.log(`New thread created: ${thread.name} (${thread.id})`);
-//   // Join the thread automatically
-//   await thread.join();
-//   console.log(`Joined thread: ${thread.name}`);
-// });
+const THREAD_CREATION_THRESHOLD_MS = 1000;
 
-// Listen for messages in threads
 client.on("messageCreate", async (message) => {
   // Skip if message is not in a thread or from a bot
   if (!message.channel.isThread() || message.author.bot) return;
 
-  console.info(
-    `New message in thread ${message.channel.name} (${message.channel.id}):`
-  );
-  console.info(`  Author: ${message.author.tag}`);
-  console.info(`  Content: ${message.content}`);
+  const isFirstMessage =
+    Math.abs(
+      (message.channel.createdTimestamp ?? 0) - (message.createdTimestamp ?? 0)
+    ) < THREAD_CREATION_THRESHOLD_MS;
+
+  let threadId: string | null = null;
+
+  if (isFirstMessage) {
+    threadId = ulid().toLowerCase();
+    store.thread.insert({
+      id: threadId,
+      organizationId: "01k32j4wwzyh3v6q56wr255jy7",
+      name: message.channel.name,
+      createdAt: new Date(),
+      discordChannelId: message.channel.id,
+    });
+  }
 
   // Example: Respond to a specific message using webhook
 
@@ -154,9 +104,11 @@ client.on("messageCreate", async (message) => {
   //   await message.reply(`Pong! 🏓 (from ${message.author.username})`);
   // }
 
+  if (!threadId) return;
+
   store.message.insert({
     id: ulid().toLowerCase(),
-    threadId: "01k3mrcg5ryca3w3mr5rz6g6br",
+    threadId,
     author: message.author.username,
     content: message.content,
     createdAt: message.createdAt,
