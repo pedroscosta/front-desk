@@ -64,4 +64,4 @@ Contributions are welcome! We don't have a contributing guide yet, but please op
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the AGPL License - see the [LICENSE](LICENSE) file for details.
