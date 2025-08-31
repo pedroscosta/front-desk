@@ -1,5 +1,7 @@
 import "./env";
 
+import type { InferLiveObject } from "@live-state/sync";
+import type { schema } from "api/schema";
 import { Client, GatewayIntentBits } from "discord.js";
 import { ulid } from "ulid";
 import { store } from "./lib/live-state";
@@ -67,7 +69,6 @@ client.on("error", (error) => {
 const THREAD_CREATION_THRESHOLD_MS = 1000;
 
 client.on("messageCreate", async (message) => {
-  // Skip if message is not in a thread or from a bot
   if (!message.channel.isThread() || message.author.bot) return;
 
   const isFirstMessage =
@@ -86,6 +87,13 @@ client.on("messageCreate", async (message) => {
       createdAt: new Date(),
       discordChannelId: message.channel.id,
     });
+  } else {
+    const thread = Object.values((store.thread as any).get()).find(
+      (t: any) => t.discordChannelId === message.channel.id
+    ) as InferLiveObject<(typeof schema)["thread"]> | undefined;
+
+    if (!thread) return;
+    threadId = thread.id;
   }
 
   // Example: Respond to a specific message using webhook
