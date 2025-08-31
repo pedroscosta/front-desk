@@ -76,6 +76,14 @@ function RouteComponent() {
                     <p className="text-muted-foreground">
                       {formatRelativeTime(message.createdAt as Date)}
                     </p>
+                    {message.origin === "discord" && (
+                      <>
+                        <span className="bg-muted-foreground size-0.75 rounded-full" />
+                        <p className="text-muted-foreground">
+                          Imported from Discord
+                        </p>
+                      </>
+                    )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>{message.content}</CardContent>
