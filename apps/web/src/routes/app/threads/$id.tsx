@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
-import { formatRelativeTime } from "@workspace/ui/lib/utils";
+import { cn, formatRelativeTime } from "@workspace/ui/lib/utils";
 import { useRef } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { ulid } from "ulid";
@@ -58,9 +58,16 @@ function RouteComponent() {
             .map((message) => (
               <Card
                 key={message.id}
-                className="relative before:w-[1px] before:h-4 before:left-4 before:absolute before:-top-4 not-first:before:bg-border"
+                className={cn(
+                  "relative before:w-[1px] before:h-4 before:left-4 before:absolute before:-top-4 not-first:before:bg-border",
+                  !message.origin && "border-[#2662D9]/20"
+                )}
               >
-                <CardHeader size="sm">
+                {/* TODO: update the way it's checking if it's an message from the current user */}
+                <CardHeader
+                  size="sm"
+                  className={cn(!message.origin && "bg-[#2662D9]/20")}
+                >
                   <CardTitle>
                     <Avatar className="size-5">
                       <AvatarFallback>{message.author[0]}</AvatarFallback>
