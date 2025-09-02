@@ -40,7 +40,7 @@ function RouteComponent() {
     <SubscriptionProvider client={client}>
       <div className="w-screen h-screen flex overflow-hidden">
         <AppSidebar />
-        <Card className="flex-1 bg-muted/30 relative m-2 ml-0">
+        <Card className="flex-1 bg-muted/30 relative m-2 ml-0 h-auto">
           <Outlet />
         </Card>
       </div>

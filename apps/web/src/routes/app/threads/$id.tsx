@@ -10,9 +10,8 @@ import {
 } from "@workspace/ui/components/card";
 import { cn, formatRelativeTime } from "@workspace/ui/lib/utils";
 import { useRef } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
 import { ulid } from "ulid";
-import { store } from "~/lib/live-state";
+import { mutate, query } from "~/lib/live-state";
 
 export const Route = createFileRoute("/app/threads/$id")({
   component: RouteComponent,
@@ -24,27 +23,9 @@ function RouteComponent() {
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const thread = useLiveQuery(store.thread[id]);
-  const org = useLiveQuery(store.organization[thread?.organizationId]);
-  const idx = org?.threads.findIndex((t) => t.id === id);
-
-  useHotkeys("left", () => {
-    if (idx === undefined) return;
-    navigate({
-      to: "/app/threads/$id",
-      params: { id: org?.threads[idx === 0 ? idx : idx - 1].id },
-    });
-  });
-
-  useHotkeys("right", () => {
-    if (idx === undefined) return;
-    navigate({
-      to: "/app/threads/$id",
-      params: {
-        id: org?.threads[idx === org?.threads.length - 1 ? idx : idx + 1].id,
-      },
-    });
-  });
+  const thread = useLiveQuery(
+    query.thread.where({ id }).include({ organization: true, messages: true })
+  )?.[0];
 
   return (
     <>
@@ -66,7 +47,9 @@ function RouteComponent() {
                 {/* TODO: update the way it's checking if it's an message from the current user */}
                 <CardHeader
                   size="sm"
-                  className={cn(!message.origin && "bg-[#2662D9]/20")}
+                  className={cn(
+                    !message.origin && "bg-[#2662D9]/15 border-[#2662D9]/20"
+                  )}
                 >
                   <CardTitle>
                     <Avatar className="size-5">
@@ -94,7 +77,7 @@ function RouteComponent() {
         <InputBox
           className="bottom-2.5 w-full shadow-lg bg-[#1B1B1E]"
           onSubmit={(value) => {
-            store.message.insert({
+            mutate.message.insert({
               id: ulid().toLowerCase(),
               author: "Pedro",
               content: value,
