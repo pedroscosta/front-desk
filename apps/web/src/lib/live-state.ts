@@ -6,7 +6,7 @@ import type { Router } from "api/router";
 import { schema } from "api/schema";
 import { authClient } from "./auth-client";
 
-export const { client, store } = createClient<Router>({
+const { client, store } = createClient<Router>({
   url: "ws://localhost:3333/api/ls/ws",
   schema,
   credentials: async () => ({
@@ -16,6 +16,10 @@ export const { client, store } = createClient<Router>({
     name: "frontdesk",
   },
 });
+
+const { query, mutate } = store;
+
+export { client, mutate, query };
 
 export const fetchClient = createFetchClient<Router>({
   url:

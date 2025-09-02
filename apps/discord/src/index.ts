@@ -1,7 +1,5 @@
 import "./env";
 
-import type { InferLiveObject } from "@live-state/sync";
-import type { schema } from "api/schema";
 import { Client, GatewayIntentBits, TextChannel } from "discord.js";
 import { ulid } from "ulid";
 import { store } from "./lib/live-state";
@@ -23,10 +21,6 @@ if (!token) {
   console.error("DISCORD_TOKEN is not defined in environment variables");
   process.exit(1);
 }
-
-store.message.subscribe(() => {
-  console.info(store.message.get());
-});
 
 // client.once("ready", async () => {
 //   if (!client.user) return;
@@ -81,7 +75,7 @@ client.on("messageCreate", async (message) => {
 
   if (isFirstMessage) {
     threadId = ulid().toLowerCase();
-    store.thread.insert({
+    store.mutate.thread.insert({
       id: threadId,
       organizationId: "01k32j4wwzyh3v6q56wr255jy7",
       name: message.channel.name,
@@ -90,9 +84,11 @@ client.on("messageCreate", async (message) => {
     });
     await new Promise((resolve) => setTimeout(resolve, 150)); // TODO debug this issue
   } else {
-    const thread = Object.values((store.thread as any).get()).find(
-      (t: any) => t.discordChannelId === message.channel.id
-    ) as InferLiveObject<(typeof schema)["thread"]> | undefined;
+    const thread = store.query.thread
+      .where({
+        discordChannelId: message.channel.id,
+      })
+      .get()?.[0];
 
     if (!thread) return;
     threadId = thread.id;
@@ -101,7 +97,7 @@ client.on("messageCreate", async (message) => {
   console.info("Thread ID:", threadId);
   if (!threadId) return;
 
-  store.message.insert({
+  store.mutate.message.insert({
     id: ulid().toLowerCase(),
     threadId,
     author: message.author.username,
@@ -113,25 +109,16 @@ client.on("messageCreate", async (message) => {
   console.info("Message inserted:", message);
 });
 
-store.message.subscribe(async () => {
-  const threads = store.thread.get() as Record<
-    string,
-    InferLiveObject<typeof schema.thread>
-  >;
-
-  const messages = Object.values(
-    store.message.get() as Record<
-      string,
-      InferLiveObject<typeof schema.message>
-    >
-  ).filter(
-    (m) => threads[m.threadId]?.discordChannelId && !m.externalMessageId
+store.query.message.include({ thread: true }).subscribe(async (v) => {
+  // TODO: migrate this when live state supports select null and not null
+  const messages = Object.values(v).filter(
+    (m) => m.thread?.discordChannelId && !m.externalMessageId
   );
 
   console.info("Messages to send:", messages);
 
   for (const message of messages) {
-    const channelId = threads[message.threadId]!.discordChannelId!;
+    const channelId = message.thread.discordChannelId;
 
     console.info("Channel ID:", channelId);
 
@@ -152,7 +139,7 @@ store.message.subscribe(async () => {
         username: message.author,
         // avatarURL: message.author.displayAvatarURL(),
       });
-      store.message.update(message.id, {
+      store.mutate.message.update(message.id, {
         externalMessageId: webhookMessage.id,
       });
     } catch (error) {

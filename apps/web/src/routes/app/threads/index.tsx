@@ -8,56 +8,28 @@ import {
 } from "@workspace/ui/components/card";
 import { useAtomValue } from "jotai/react";
 import { activeOrganizationAtom } from "~/lib/atoms";
-import { store } from "~/lib/live-state";
+import { query } from "~/lib/live-state";
 
 export const Route = createFileRoute("/app/threads/")({
   component: RouteComponent,
 });
 
-function randomIntFromInterval(min: number, max: number) {
-  // min and max included
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 function RouteComponent() {
   const currentOrg = useAtomValue(activeOrganizationAtom);
 
-  // const orgObj = useLiveQuery(store.organization);
-  const orgObj = useLiveQuery(store.organization[currentOrg!.id]);
-  const threads = orgObj?.threads ?? [];
+  const orgObj = useLiveQuery(
+    query.organization.where({ id: currentOrg!.id }).include({
+      threads: true,
+    })
+  )?.[0];
 
   return (
     <>
-      {/* <Button
-        onClick={() => {
-          const threadId = ulid().toLowerCase();
-          store.thread.insert({
-            id: threadId,
-            organizationId: currentOrg!.id,
-            name: `Thread ${threads.length + 1}`,
-            createdAt: new Date(),
-          });
-
-          const messagesCount = randomIntFromInterval(5, 10);
-
-          for (let i = 0; i < messagesCount; i++) {
-            store.message.insert({
-              id: ulid().toLowerCase(),
-              threadId,
-              author: faker.person.firstName(),
-              content: faker.lorem.paragraphs(randomIntFromInterval(1, 3)),
-              createdAt: new Date(),
-            });
-          }
-        }}
-      >
-        Add Thread
-      </Button> */}
       <CardHeader>
         <CardTitle className="justify-self-center">Threads</CardTitle>
       </CardHeader>
       <CardContent className="overflow-y-auto gap-0 items-center">
-        {threads
+        {orgObj?.threads
           .sort((a, b) => a.id.localeCompare(b.id))
           .map((thread) => (
             <Link
