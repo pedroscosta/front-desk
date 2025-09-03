@@ -1,4 +1,9 @@
-import { TextChannel, type ThreadChannel, WebhookClient } from "discord.js";
+import {
+  ForumChannel,
+  TextChannel,
+  ThreadChannel,
+  WebhookClient,
+} from "discord.js";
 
 const webhookClients = new Map<string, WebhookClient>();
 
@@ -17,7 +22,13 @@ export async function getOrCreateWebhook(
   try {
     // For threads, get the parent channel
     const targetChannel = "parent" in channel ? channel.parent : channel;
-    if (!targetChannel || !(targetChannel instanceof TextChannel)) {
+    if (
+      !targetChannel ||
+      !(
+        targetChannel instanceof TextChannel ||
+        targetChannel instanceof ForumChannel
+      )
+    ) {
       throw new Error("Could not get parent text channel for thread");
     }
 
