@@ -8,8 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
+import { useAutoScroll } from "@workspace/ui/hooks/use-auto-scroll";
 import { cn, formatRelativeTime } from "@workspace/ui/lib/utils";
-import { useRef } from "react";
 import { ulid } from "ulid";
 import { mutate, query } from "~/lib/live-state";
 
@@ -21,11 +21,15 @@ function RouteComponent() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
 
-  const bottomRef = useRef<HTMLDivElement>(null);
-
   const thread = useLiveQuery(
     query.thread.where({ id }).include({ organization: true, messages: true })
   )?.[0];
+
+  const { scrollRef, disableAutoScroll } = useAutoScroll({
+    smooth: false,
+    content: thread?.messages,
+    offset: 264,
+  });
 
   return (
     <>
@@ -33,7 +37,12 @@ function RouteComponent() {
         <CardTitle className="justify-self-center">{thread?.name}</CardTitle>
       </CardHeader>
       <div className="flex flex-col p-4 gap-4 flex-1 w-full max-w-5xl mx-auto overflow-hidden">
-        <div className="p-4 flex-1 flex flex-col gap-4 overflow-y-auto">
+        <div
+          className="p-4 flex-1 flex flex-col gap-4 overflow-y-auto"
+          ref={scrollRef}
+          onScroll={disableAutoScroll}
+          onTouchMove={disableAutoScroll}
+        >
           {thread?.messages
             .sort((a, b) => a.id.localeCompare(b.id))
             .map((message) => (
@@ -72,7 +81,7 @@ function RouteComponent() {
                 <CardContent>{message.content}</CardContent>
               </Card>
             ))}
-          <div ref={bottomRef} className="-mt-4" />
+          {/* <div ref={bottomRef} className="-mt-4" /> */}
         </div>
         <InputBox
           className="bottom-2.5 w-full shadow-lg bg-[#1B1B1E]"
@@ -84,9 +93,9 @@ function RouteComponent() {
               threadId: id,
               createdAt: new Date(),
             });
-            setTimeout(() => {
-              bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-            });
+            // setTimeout(() => {
+            //   bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+            // });
           }}
         />
       </div>
