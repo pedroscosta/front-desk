@@ -2,9 +2,8 @@ import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { Placeholder } from "@tiptap/extensions";
 import { EditorContent, JSONContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
-import { EditorExtensions } from "@workspace/ui/lib/tiptap";
+import { EditorExtensions, KeyBinds } from "@workspace/ui/lib/tiptap";
 import { cn } from "@workspace/ui/lib/utils";
-import isHotkey from "is-hotkey";
 import { ArrowUp } from "lucide-react";
 import { Button } from "../button";
 
@@ -40,31 +39,27 @@ export function InputBox({
       Placeholder.configure({
         placeholder: "Write a reply...",
       }),
+      KeyBinds.configure({
+        keybinds: {
+          "Mod-Enter": ({ editor }) => {
+            const content = editor.getJSON().content;
+            if (content.length && content[0]?.content?.length) {
+              handleSubmit(content);
+            }
+
+            return true;
+          },
+        },
+      }),
     ],
     content: _value,
     onUpdate: ({ editor }) => {
       setValue(editor.getJSON().content);
     },
-    editorProps: {
-      handleKeyDown: (_view, event) => {
-        if (isHotkey("mod+enter")(event)) {
-          event.preventDefault();
-          if (!disableSend) {
-            handleSubmit();
-          }
-          return true;
-        }
-        return false;
-      },
-      attributes: {
-        class: "",
-        // "prose prose-no-margin prose-sm dark:prose-invert text-primary marker:text-neutral-800 dark:marker:text-neutral-300 prose-li:mt-1 prose-li:mb-0 prose-li:pl-0 prose-ul:pl-7 [&_li>p]:m-0",
-      },
-    },
   });
 
-  const handleSubmit = () => {
-    onSubmit?.(_value);
+  const handleSubmit = (content: JSONContent[]) => {
+    onSubmit?.(content);
     if (clearOnSubmit) {
       editor.commands.setContent([]);
     }
@@ -92,7 +87,7 @@ export function InputBox({
           size="sm"
           variant={disableSend ? "secondary" : "default"}
           disabled={disableSend}
-          onClick={handleSubmit}
+          onClick={() => handleSubmit(_value)}
         >
           <ArrowUp />
           Reply

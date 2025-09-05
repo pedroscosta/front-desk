@@ -1,5 +1,5 @@
 import DefaultHeading from "@tiptap/extension-heading";
-import { mergeAttributes } from "@tiptap/react";
+import { Editor, Extension, mergeAttributes } from "@tiptap/react";
 import { StarterKit as DefaultStarterKit } from "@tiptap/starter-kit";
 
 export const StarterKit = DefaultStarterKit.configure({
@@ -83,3 +83,19 @@ export const EditorExtensions = [
     },
   }).configure({ levels: [1, 2, 3, 4] }),
 ];
+
+export const KeyBinds = Extension.create<{
+  keybinds: Record<string, (props: { editor: Editor }) => boolean>;
+}>({
+  name: "textAlign",
+
+  addOptions() {
+    return {
+      keybinds: {},
+    };
+  },
+
+  addKeyboardShortcuts() {
+    return this.options.keybinds;
+  },
+});
