@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@plugin "@tailwindcss/typography";
 @source "../../../apps/**/*.{ts,tsx}";
 @source "../../../components/**/*.{ts,tsx}";
 @source "../**/*.{ts,tsx}";
@@ -79,6 +78,8 @@
 }
 
 @theme inline {
+  --font-family: "Inter Variable", sans-serif;
+  --font-mono: "Intel One Mono Variable", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -133,6 +134,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: ;
   }
 }
 
