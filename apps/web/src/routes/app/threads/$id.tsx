@@ -81,7 +81,6 @@ function RouteComponent() {
                 <CardContent>{message.content}</CardContent>
               </Card>
             ))}
-          {/* <div ref={bottomRef} className="-mt-4" /> */}
         </div>
         <InputBox
           className="bottom-2.5 w-full shadow-lg bg-[#1B1B1E]"
@@ -89,13 +88,10 @@ function RouteComponent() {
             mutate.message.insert({
               id: ulid().toLowerCase(),
               author: "Pedro",
-              content: value,
+              content: JSON.stringify(value),
               threadId: id,
               createdAt: new Date(),
             });
-            // setTimeout(() => {
-            //   bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-            // });
           }}
         />
       </div>
