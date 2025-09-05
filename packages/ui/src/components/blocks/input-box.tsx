@@ -2,7 +2,7 @@ import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { Placeholder } from "@tiptap/extensions";
 import { EditorContent, JSONContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
-import { StarterKit } from "@workspace/ui/lib/tiptap";
+import { EditorExtensions } from "@workspace/ui/lib/tiptap";
 import { cn } from "@workspace/ui/lib/utils";
 import isHotkey from "is-hotkey";
 import { ArrowUp } from "lucide-react";
@@ -36,7 +36,7 @@ export function InputBox({
   // TODO copy as markdown
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      ...EditorExtensions,
       Placeholder.configure({
         placeholder: "Write a reply...",
       }),
@@ -83,7 +83,7 @@ export function InputBox({
     >
       <EditorContent
         editor={editor}
-        className="border max-h-96 overflow-y-auto placeholder:text-muted-foreground"
+        className="max-h-96 overflow-y-auto placeholder:text-muted-foreground"
       />
       <BubbleMenu editor={editor}>This is the bubble menu</BubbleMenu>
 
