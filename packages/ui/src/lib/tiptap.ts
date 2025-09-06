@@ -1,5 +1,5 @@
 import DefaultHeading from "@tiptap/extension-heading";
-import { Editor, Extension, mergeAttributes } from "@tiptap/react";
+import { type Editor, Extension, mergeAttributes } from "@tiptap/react";
 import { StarterKit as DefaultStarterKit } from "@tiptap/starter-kit";
 
 export const StarterKit = DefaultStarterKit.configure({
@@ -56,6 +56,7 @@ export const StarterKit = DefaultStarterKit.configure({
     },
   },
   heading: false,
+  trailingNode: false,
 });
 
 export const EditorExtensions = [
