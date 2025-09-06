@@ -1,7 +1,7 @@
 import { useLiveQuery } from "@live-state/sync/client";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
-import { InputBox } from "@workspace/ui/components/blocks/input-box";
+import { InputBox, RichText } from "@workspace/ui/components/blocks/tiptap";
 import {
   Card,
   CardContent,
@@ -16,6 +16,14 @@ import { mutate, query } from "~/lib/live-state";
 export const Route = createFileRoute("/app/threads/$id")({
   component: RouteComponent,
 });
+
+const safeParseJSON = (json: string) => {
+  try {
+    return JSON.parse(json);
+  } catch (e) {
+    return json;
+  }
+};
 
 function RouteComponent() {
   const { id } = Route.useParams();
@@ -78,7 +86,9 @@ function RouteComponent() {
                     )}
                   </CardTitle>
                 </CardHeader>
-                <CardContent>{message.content}</CardContent>
+                <CardContent>
+                  <RichText content={safeParseJSON(message.content)} />
+                </CardContent>
               </Card>
             ))}
         </div>

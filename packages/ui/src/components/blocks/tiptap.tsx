@@ -1,10 +1,11 @@
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { Placeholder } from "@tiptap/extensions";
-import { EditorContent, JSONContent, useEditor } from "@tiptap/react";
+import { EditorContent, type JSONContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import { EditorExtensions, KeyBinds } from "@workspace/ui/lib/tiptap";
 import { cn } from "@workspace/ui/lib/utils";
 import { ArrowUp } from "lucide-react";
+import { useLayoutEffect } from "react";
 import { Button } from "../button";
 
 export function InputBox({
@@ -95,4 +96,18 @@ export function InputBox({
       </div>
     </div>
   );
+}
+
+export function RichText({ content }: { content?: JSONContent[] | string }) {
+  const editor = useEditor({
+    content: [],
+    editable: false,
+    extensions: EditorExtensions,
+  });
+
+  useLayoutEffect(() => {
+    editor?.commands.setContent(content ?? []);
+  }, [content, editor]);
+
+  return <EditorContent editor={editor} />;
 }
