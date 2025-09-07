@@ -1,4 +1,5 @@
 /** biome-ignore-all lint/style/noNonNullAssertion: Too much type work - PRs welcome */
+import { Level } from "@tiptap/extension-heading";
 import type { JSONContent } from "@tiptap/react";
 import type {
   BlockContent,
@@ -28,6 +29,14 @@ const markToMdastType: Record<string, PhrasingContent["type"]> = {
   link: "link",
 };
 
+const markPrecedence: Record<string, number> = {
+  link: 0,
+  bold: 1,
+  italic: 2,
+  strike: 3,
+  code: 4,
+};
+
 const convertTextMarks = (
   marks: JSONContent["marks"],
   text: Text
@@ -36,7 +45,11 @@ const convertTextMarks = (
     return text;
   }
 
-  const [mark, ...rest] = marks;
+  const [mark, ...rest] = [...marks].sort(
+    (a, b) =>
+      (markPrecedence[a?.type ?? ""] ?? 99) -
+      (markPrecedence[b?.type ?? ""] ?? 99)
+  );
 
   const type = markToMdastType[mark!.type];
 
@@ -68,9 +81,10 @@ const tipTapToMdast: Record<string, (node: JSONContent) => Node> = {
   paragraph: (node) =>
     ({
       type: "paragraph",
-      children: (node.content?.map((child) =>
-        tipTapToMdast[child.type!]?.(child)
-      ) ?? []) as PhrasingContent[],
+      children: (node.content?.flatMap((child) => {
+        const result = tipTapToMdast[child.type!]?.(child);
+        return result ? [result] : [];
+      }) ?? []) as PhrasingContent[],
     } satisfies Paragraph),
   text: (node) =>
     convertTextMarks(node.marks, {
@@ -80,7 +94,7 @@ const tipTapToMdast: Record<string, (node: JSONContent) => Node> = {
   heading: (node) =>
     ({
       type: "heading",
-      depth: node.attrs?.level ?? 1,
+      depth: Math.max(1, Math.min(4, node.attrs?.level ?? 1)) as Level,
       children: (node.content?.map((child) =>
         tipTapToMdast[child.type!]?.(child)
       ) ?? []) as PhrasingContent[],

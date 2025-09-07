@@ -29,7 +29,7 @@ const mdastTextsToTipTap = (
       text: (node as InlineCode).value,
       marks: [
         {
-          type: "inlineCode",
+          type: "code",
         },
       ],
     };
@@ -60,6 +60,17 @@ const mdastTextsToTipTap = (
     ]);
   }
 
+  if (node.type === "link") {
+    return mdastTextsToTipTap(node.children[0] as any, [
+      {
+        type: "link",
+        attrs: {
+          href: (node as Link).url,
+        },
+      },
+    ]);
+  }
+
   return {
     type: "text",
     marks,
@@ -75,6 +86,7 @@ const mdastToTipTap: {
   strong: mdastTextsToTipTap,
   inlineCode: mdastTextsToTipTap,
   delete: mdastTextsToTipTap,
+  link: mdastTextsToTipTap,
 
   paragraph: (node: Paragraph): JSONContent => ({
     type: "paragraph",
@@ -91,21 +103,6 @@ const mdastToTipTap: {
     content: node.children.map((child) =>
       mdastToTipTap[child.type](child as any)
     ),
-  }),
-
-  link: (node: Link): JSONContent => ({
-    type: "text",
-    content: node.children.map((child) =>
-      mdastToTipTap[child.type](child as any)
-    ),
-    marks: [
-      {
-        type: "link",
-        attrs: {
-          href: node.url,
-        },
-      },
-    ],
   }),
 
   blockquote: (node: Blockquote): JSONContent => ({

@@ -99,8 +99,8 @@ export function InputBox({
         "border-input border focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] rounded-md px-4 py-2 flex flex-col gap-2 cursor-text",
         className
       )}
-      onClick={() => editor?.chain().focus()}
-      onKeyUp={() => editor?.chain().focus()}
+      onClick={() => editor?.chain().focus().run()}
+      onKeyUp={() => editor?.chain().focus().run()}
       {...props}
     >
       <EditorContent
@@ -116,7 +116,6 @@ export function InputBox({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Toggle
-                  onClick={() => editor.chain().focus().toggleCode().run()}
                   data-state={editor.isActive("code") ? "on" : "off"}
                   className="hover:text-popover-foreground text-popover-foreground py-0 px-2 gap-0.5 w-13"
                 >
@@ -268,7 +267,6 @@ export function InputBox({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Toggle
-                  onClick={() => editor.chain().focus().toggleCode().run()}
                   data-state={editor.isActive("code") ? "on" : "off"}
                   className="hover:text-popover-foreground text-popover-foreground py-0 px-2 gap-0.5 w-13"
                 >
@@ -335,7 +333,14 @@ export function RichText({ content }: { content?: JSONContent[] | string }) {
   });
 
   useLayoutEffect(() => {
-    editor?.commands.setContent(content ?? []);
+    if (!editor) return;
+    if (typeof content === "string") {
+      editor.commands.setContent([
+        { type: "paragraph", content: [{ type: "text", text: content }] },
+      ]);
+    } else {
+      editor.commands.setContent(content ?? []);
+    }
   }, [content, editor]);
 
   return <EditorContent editor={editor} />;

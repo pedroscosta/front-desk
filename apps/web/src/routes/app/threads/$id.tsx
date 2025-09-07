@@ -17,12 +17,24 @@ export const Route = createFileRoute("/app/threads/$id")({
   component: RouteComponent,
 });
 
-const safeParseJSON = (json: string) => {
+const safeParseJSON = (raw: string) => {
   try {
-    return JSON.parse(json);
-  } catch (e) {
-    return json;
-  }
+    const parsed = JSON.parse(raw);
+    // Accept common shapes produced by our editor:
+    if (Array.isArray(parsed)) return parsed;
+    if (parsed && typeof parsed === "object" && "content" in parsed) {
+      // e.g. a full doc { type: 'doc', content: [...] }
+      // Normalize to content[] to match our usage.
+      return (parsed as any).content ?? [];
+    }
+  } catch {}
+  // Fallback: wrap plain text in a single paragraph node.
+  return [
+    {
+      type: "paragraph",
+      content: [{ type: "text", text: String(raw) }],
+    },
+  ];
 };
 
 function RouteComponent() {
