@@ -1,7 +1,7 @@
 import { useLiveQuery } from "@live-state/sync/client";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
-import { InputBox } from "@workspace/ui/components/blocks/input-box";
+import { InputBox, RichText } from "@workspace/ui/components/blocks/tiptap";
 import {
   Card,
   CardContent,
@@ -16,6 +16,26 @@ import { mutate, query } from "~/lib/live-state";
 export const Route = createFileRoute("/app/threads/$id")({
   component: RouteComponent,
 });
+
+const safeParseJSON = (raw: string) => {
+  try {
+    const parsed = JSON.parse(raw);
+    // Accept common shapes produced by our editor:
+    if (Array.isArray(parsed)) return parsed;
+    if (parsed && typeof parsed === "object" && "content" in parsed) {
+      // e.g. a full doc { type: 'doc', content: [...] }
+      // Normalize to content[] to match our usage.
+      return (parsed as any).content ?? [];
+    }
+  } catch {}
+  // Fallback: wrap plain text in a single paragraph node.
+  return [
+    {
+      type: "paragraph",
+      content: [{ type: "text", text: String(raw) }],
+    },
+  ];
+};
 
 function RouteComponent() {
   const { id } = Route.useParams();
@@ -78,10 +98,11 @@ function RouteComponent() {
                     )}
                   </CardTitle>
                 </CardHeader>
-                <CardContent>{message.content}</CardContent>
+                <CardContent>
+                  <RichText content={safeParseJSON(message.content)} />
+                </CardContent>
               </Card>
             ))}
-          {/* <div ref={bottomRef} className="-mt-4" /> */}
         </div>
         <InputBox
           className="bottom-2.5 w-full shadow-lg bg-[#1B1B1E]"
@@ -89,13 +110,10 @@ function RouteComponent() {
             mutate.message.insert({
               id: ulid().toLowerCase(),
               author: "Pedro",
-              content: value,
+              content: JSON.stringify(value),
               threadId: id,
               createdAt: new Date(),
             });
-            // setTimeout(() => {
-            //   bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-            // });
           }}
         />
       </div>

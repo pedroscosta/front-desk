@@ -1,3 +1,5 @@
+import "@fontsource-variable/intel-one-mono";
+import "@fontsource-variable/inter";
 import {
   createRootRoute,
   HeadContent,

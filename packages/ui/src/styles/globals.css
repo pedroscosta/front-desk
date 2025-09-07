@@ -78,6 +78,8 @@
 }
 
 @theme inline {
+  --font-family: "Inter Variable", sans-serif;
+  --font-mono: "Intel One Mono Variable", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -133,4 +135,16 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: var(--color-muted-foreground);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }
