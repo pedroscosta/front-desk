@@ -12,7 +12,12 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"],
+      "@workspace/ui/*": ["../../packages/ui/src/*"]
+    }
   },
   "include": ["src", "tests"]
 }

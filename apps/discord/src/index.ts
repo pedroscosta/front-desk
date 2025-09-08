@@ -1,9 +1,31 @@
 import "./env";
 
+import { parse } from "@workspace/ui/lib/md-tiptap";
+import { stringify } from "@workspace/ui/lib/tiptap-md";
 import { Client, GatewayIntentBits, TextChannel } from "discord.js";
 import { ulid } from "ulid";
 import { store } from "./lib/live-state";
 import { getOrCreateWebhook } from "./utils";
+
+const safeParseJSON = (raw: string) => {
+  try {
+    const parsed = JSON.parse(raw);
+    // Accept common shapes produced by our editor:
+    if (Array.isArray(parsed)) return parsed;
+    if (parsed && typeof parsed === "object" && "content" in parsed) {
+      // e.g. a full doc { type: 'doc', content: [...] }
+      // Normalize to content[] to match our usage.
+      return (parsed as any).content ?? [];
+    }
+  } catch {}
+  // Fallback: wrap plain text in a single paragraph node.
+  return [
+    {
+      type: "paragraph",
+      content: [{ type: "text", text: String(raw) }],
+    },
+  ];
+};
 
 const client = new Client({
   intents: [
@@ -101,7 +123,7 @@ client.on("messageCreate", async (message) => {
     id: ulid().toLowerCase(),
     threadId,
     author: message.author.username,
-    content: message.content,
+    content: JSON.stringify(parse(message.content)),
     createdAt: message.createdAt,
     origin: "discord",
     externalMessageId: message.id,
@@ -134,7 +156,10 @@ store.query.message.include({ thread: true }).subscribe(async (v) => {
     try {
       const webhookClient = await getOrCreateWebhook(channel as TextChannel);
       const webhookMessage = await webhookClient.send({
-        content: message.content,
+        content: stringify(safeParseJSON(message.content), {
+          heading: true,
+          horizontalRule: true,
+        }),
         threadId: channel.id,
         username: message.author,
         // avatarURL: message.author.displayAvatarURL(),
