@@ -159,7 +159,6 @@ store.query.message.include({ thread: true }).subscribe(async (v) => {
         content: stringify(safeParseJSON(message.content), {
           heading: true,
           horizontalRule: true,
-          link: true,
         }),
         threadId: channel.id,
         username: message.author,
