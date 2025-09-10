@@ -23,19 +23,13 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       ...seo({
-        title:
-          "TanStack Start | Type-Safe, Client-First, Full-Stack React Framework",
+        title: "FrontDesk",
         description:
-          "TanStack Start is a type-safe, client-first, full-stack React framework.",
+          "The best way to support your customers is to be there when they need you.",
       }),
     ],
     links: [
       // { rel: "stylesheet", href: appCss },
-      {
-        rel: "apple-touch-icon",
-        sizes: "180x180",
-        href: "/apple-touch-icon.png",
-      },
       {
         rel: "icon",
         type: "image/png",
