@@ -8,17 +8,34 @@ interface WaitlistTable {
   email: string;
 }
 
-const dialect = new PostgresJSDialect({
-  postgres: postgres({
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    port: Number(process.env.DB_PORT),
-    max: 10,
-  }),
-});
+interface DB {
+  waitlist: WaitlistTable;
+}
 
-export const db = new Kysely<{ waitlist: WaitlistTable }>({
-  dialect,
-});
+// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
+export class WorkerDb {
+  private static instance: Kysely<DB> | null = null;
+
+  static async getInstance(): Promise<Kysely<DB>> {
+    const pg = postgres({
+      database: process.env.DB_NAME,
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      port: Number(process.env.DB_PORT),
+      max: 10,
+    });
+    /**
+     * The following line is to check if the connection is successful.
+     */
+    await pg.unsafe("SELECT 1");
+
+    this.instance = new Kysely<DB>({
+      dialect: new PostgresJSDialect({
+        postgres: pg,
+      }),
+    });
+
+    return this.instance;
+  }
+}

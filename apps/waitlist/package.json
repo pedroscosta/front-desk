@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build && tsc --noEmit",
-    "start": "NODE_ENV=production node .output/server/index.mjs"
+    "start": "NODE_ENV=production node .output/server/index.mjs",
+    "deploy": "build && wrangler deploy",
+    "cf-typegen": "wrangler types --env-interface Env"
   },
   "dependencies": {
     "@fontsource-variable/intel-one-mono": "^5.2.1",
@@ -41,6 +43,7 @@
     "tailwindcss": "^4.1.12",
     "typescript": "^5.7.2",
     "vite": "^6.3.5",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "wrangler": "^4.35.0"
   }
 }

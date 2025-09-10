@@ -10,14 +10,23 @@ import { Input } from "@workspace/ui/components/input";
 import { Spinner } from "@workspace/ui/components/spinner";
 import { cn } from "@workspace/ui/lib/utils";
 import { Star } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { applySchema, applyToWaitlist } from "~/lib/sever-funcs";
 import { Route } from "../routes/index";
 
 export const WaitlistForm = () => {
-  const { count, gitHubStars } = Route.useLoaderData();
+  const { count } = Route.useLoaderData();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [stars, setStars] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch("https://api.github.com/repos/pedroscosta/front-desk")
+      .then((res) => res.json())
+      .then((res) => res.stargazers_count)
+      .then((stars) => setStars(stars))
+      .catch((e) => console.error("Error fetching github stars", e));
+  }, []);
 
   const { Field, handleSubmit } = useForm({
     defaultValues: {
@@ -44,7 +53,7 @@ export const WaitlistForm = () => {
         <a href="https://github.com/pedroscosta/live-state">
           Star on GitHub
           <Star className="ml-2 h-4 w-4" />
-          {gitHubStars}
+          {stars}
         </a>
       </Button>
       <h1 className="text-6xl font-normal text-center">

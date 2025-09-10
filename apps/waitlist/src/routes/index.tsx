@@ -8,14 +8,9 @@ import { waitlistCount } from "~/lib/sever-funcs";
 export const Route = createFileRoute("/")({
   component: Home,
   loader: async () => {
-    const [count, gitHubStars] = await Promise.all([
-      await waitlistCount(),
-      await fetch("https://api.github.com/repos/pedroscosta/front-desk")
-        .then((res) => res.json())
-        .then((res) => res.stargazers_count),
-    ]);
-    console.log(count, gitHubStars);
-    return { count: count.count, gitHubStars };
+    const count = await waitlistCount();
+
+    return count;
   },
 });
 
