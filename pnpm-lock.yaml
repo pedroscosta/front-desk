@@ -98,6 +98,9 @@ importers:
 
   apps/waitlist:
     dependencies:
+      '@fontsource-variable/intel-one-mono':
+        specifier: ^5.2.1
+        version: 5.2.1
       '@fontsource-variable/inter':
         specifier: ^5.2.6
         version: 5.2.6
