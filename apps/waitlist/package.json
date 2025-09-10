@@ -22,6 +22,7 @@
     "lucide-react": "^0.475.0",
     "next-themes": "^0.4.6",
     "pg": "^8.15.6",
+    "pg-native": "^3.5.2",
     "postprocessing": "^6.37.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
