@@ -96,7 +96,7 @@ importers:
         specifier: ^4.19.3
         version: 4.20.5
 
-  apps/wailist:
+  apps/waitlist:
     dependencies:
       '@fontsource-variable/inter':
         specifier: ^5.2.6
