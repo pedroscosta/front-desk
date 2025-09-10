@@ -26,6 +26,7 @@ export const Route = createRootRoute({
         title: "FrontDesk",
         description:
           "The best way to support your customers is to be there when they need you.",
+        image: "/og-image.png",
       }),
     ],
     links: [
