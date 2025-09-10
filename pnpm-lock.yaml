@@ -128,18 +128,18 @@ importers:
       kysely:
         specifier: ^0.28.5
         version: 0.28.5
+      kysely-postgres-js:
+        specifier: ^3.0.0
+        version: 3.0.0(kysely@0.28.5)(postgres@3.4.7)
       lucide-react:
         specifier: ^0.475.0
         version: 0.475.0(react@19.1.0)
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      pg:
-        specifier: ^8.15.6
-        version: 8.15.6(pg-native@3.5.2)
-      pg-native:
-        specifier: ^3.5.2
-        version: 3.5.2
+      postgres:
+        specifier: ^3.4.7
+        version: 3.4.7
       postprocessing:
         specifier: ^6.37.7
         version: 6.37.7(three@0.180.0)
@@ -165,9 +165,6 @@ importers:
       '@types/node':
         specifier: ^22.5.4
         version: 22.15.3
-      '@types/pg':
-        specifier: ^8.11.14
-        version: 8.11.14
       '@types/react':
         specifier: ^19.0.8
         version: 19.1.2
@@ -5310,6 +5307,16 @@ packages:
   kuler@2.0.0:
     resolution: {integrity: sha512-Xq9nH7KlWZmXAtodXDDRE7vs6DU1gTU8zYDHDiWLSip45Egwq3plLHzPn27NgvzL2r1LMPC1vdqh98sQxtqj4A==}
 
+  kysely-postgres-js@3.0.0:
+    resolution: {integrity: sha512-o2t/xNSYJQDW6rVGGFPXKmZ0BEz2dGn66c2B+cO/k9ZNcU2qPWPycQPQ+B+P2MBXbKYq0xV9BZmFIvkUrmFWAQ==}
+    engines: {bun: '>=1.2', node: '>=20'}
+    peerDependencies:
+      kysely: '>= 0.24.0 < 1'
+      postgres: ^3.4.0
+    peerDependenciesMeta:
+      postgres:
+        optional: true
+
   kysely@0.27.6:
     resolution: {integrity: sha512-FIyV/64EkKhJmjgC0g2hygpBv5RNWVPyNCqSAD7eTCv6eFWNIi4PN1UvdSJGicN/o35bnevgis4Y0UDC0qi8jQ==}
     engines: {node: '>=14.0.0'}
@@ -6246,6 +6253,10 @@ packages:
 
   postgres-range@1.1.4:
     resolution: {integrity: sha512-i/hbxIE9803Alj/6ytL7UHQxRvZkI9O4Sy+J3HGc4F4oo/2eQAjTSNJ0bfxyse3bH0nuVesCk+3IRLaMtG3H6w==}
+
+  postgres@3.4.7:
+    resolution: {integrity: sha512-Jtc2612XINuBjIl/QTWsV5UvE8UHuNblcO3vVADSrKsrc6RqGX6lOW1cEo3CM2v0XG4Nat8nI+YM7/f26VxXLw==}
+    engines: {node: '>=12'}
 
   postprocessing@6.37.7:
     resolution: {integrity: sha512-3mXzCyhHQvw6cMQKzvHUzQVsy21yC3PZMIeH7KUjx+EVqLWRFPnARh4DEnnFJ+tE08mmIHrrN7UtxVR1Gxbokw==}
@@ -13008,6 +13019,12 @@ snapshots:
 
   kuler@2.0.0: {}
 
+  kysely-postgres-js@3.0.0(kysely@0.28.5)(postgres@3.4.7):
+    dependencies:
+      kysely: 0.28.5
+    optionalDependencies:
+      postgres: 3.4.7
+
   kysely@0.27.6: {}
 
   kysely@0.28.5: {}
@@ -13026,6 +13043,7 @@ snapshots:
     dependencies:
       bindings: 1.5.0
       nan: 2.22.2
+    optional: true
 
   lightningcss-darwin-arm64@1.29.2:
     optional: true
@@ -13637,7 +13655,8 @@ snapshots:
       postprocessing: 6.37.7(three@0.180.0)
       three: 0.180.0
 
-  nan@2.22.2: {}
+  nan@2.22.2:
+    optional: true
 
   nanoid@3.3.11: {}
 
@@ -14069,6 +14088,7 @@ snapshots:
     dependencies:
       libpq: 1.8.15
       pg-types: 2.2.0
+    optional: true
 
   pg-numeric@1.0.2: {}
 
@@ -14173,6 +14193,8 @@ snapshots:
   postgres-interval@3.0.0: {}
 
   postgres-range@1.1.4: {}
+
+  postgres@3.4.7: {}
 
   postprocessing@6.37.7(three@0.180.0):
     dependencies:

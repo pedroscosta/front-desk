@@ -1,5 +1,6 @@
-import { type Generated, Kysely, PostgresDialect } from "kysely";
-import { Pool } from "pg";
+import { type Generated, Kysely } from "kysely";
+import { PostgresJSDialect } from "kysely-postgres-js";
+import postgres from "postgres";
 
 interface WaitlistTable {
   id: Generated<number>;
@@ -7,8 +8,8 @@ interface WaitlistTable {
   email: string;
 }
 
-const dialect = new PostgresDialect({
-  pool: new Pool({
+const dialect = new PostgresJSDialect({
+  postgres: postgres({
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
