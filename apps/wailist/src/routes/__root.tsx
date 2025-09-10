@@ -6,7 +6,6 @@ import {
   Outlet,
   Scripts,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
 import { NotFound } from "~/components/NotFound";
@@ -88,7 +87,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           enableColorScheme
         >
           {children}
-          <TanStackRouterDevtools position="bottom-right" />
         </NextThemesProvider>
         <Scripts />
       </body>

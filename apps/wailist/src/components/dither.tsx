@@ -321,23 +321,25 @@ export default function Dither({
   mouseRadius = 1,
 }: DitherProps) {
   return (
-    <Canvas
-      className="w-full h-full relative opacity-30"
-      camera={{ position: [0, 0, 6] }}
-      dpr={window.devicePixelRatio}
-      gl={{ antialias: true, preserveDrawingBuffer: true }}
-    >
-      <DitheredWaves
-        waveSpeed={waveSpeed}
-        waveFrequency={waveFrequency}
-        waveAmplitude={waveAmplitude}
-        waveColor={waveColor}
-        colorNum={colorNum}
-        pixelSize={pixelSize}
-        disableAnimation={disableAnimation}
-        enableMouseInteraction={enableMouseInteraction}
-        mouseRadius={mouseRadius}
-      />
-    </Canvas>
+    <div className="inset-0 absolute -z-10">
+      <Canvas
+        className="w-full h-full opacity-30 inset-0"
+        camera={{ position: [0, 0, 6] }}
+        dpr={window.devicePixelRatio}
+        gl={{ antialias: true, preserveDrawingBuffer: true }}
+      >
+        <DitheredWaves
+          waveSpeed={waveSpeed}
+          waveFrequency={waveFrequency}
+          waveAmplitude={waveAmplitude}
+          waveColor={waveColor}
+          colorNum={colorNum}
+          pixelSize={pixelSize}
+          disableAnimation={disableAnimation}
+          enableMouseInteraction={enableMouseInteraction}
+          mouseRadius={mouseRadius}
+        />
+      </Canvas>
+    </div>
   );
 }
