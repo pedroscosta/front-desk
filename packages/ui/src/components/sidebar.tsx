@@ -127,7 +127,7 @@ function SidebarProvider({
 
   return (
     <SidebarContext.Provider value={contextValue}>
-      <TooltipProvider delayDuration={0}>
+      <TooltipProvider>
         <div
           data-slot="sidebar-wrapper"
           style={
@@ -533,10 +533,9 @@ function SidebarMenuButton({
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild>{button}</TooltipTrigger>
+      <TooltipTrigger>{button}</TooltipTrigger>
       <TooltipContent
         side="right"
-        align="center"
         hidden={state !== "collapsed" || isMobile}
         {...tooltip}
       />
