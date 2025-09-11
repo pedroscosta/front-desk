@@ -78,10 +78,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <PosthogProvider>
           <NextThemesProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
             disableTransitionOnChange
             enableColorScheme
+            forcedTheme="dark"
           >
             {children}
           </NextThemesProvider>

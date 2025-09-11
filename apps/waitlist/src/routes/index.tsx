@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
-    <div className="w-full h-screen flex flex-col overflow-hidden">
+    <div className="w-full min-h-screen flex flex-col overflow-hidden">
       <div className="w-full h-12 border-b flex items-center justify-between px-4 ">
         <div className="flex gap-2 items-center">
           <Icon className="size-6" />
