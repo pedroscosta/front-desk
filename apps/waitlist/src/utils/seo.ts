@@ -20,11 +20,15 @@ export const seo = ({
     { name: "og:type", content: "website" },
     { name: "og:title", content: title },
     { name: "og:description", content: description },
+    { name: "og:url", content: "https://tryfrontdesk.app" },
     ...(image
       ? [
-          { name: "twitter:image", content: image },
+          {
+            name: "twitter:image",
+            content: `https://tryfrontdesk.app${image}`,
+          },
           { name: "twitter:card", content: "summary_large_image" },
-          { name: "og:image", content: image },
+          { name: "og:image", content: `https://tryfrontdesk.app${image}` },
         ]
       : []),
   ];
