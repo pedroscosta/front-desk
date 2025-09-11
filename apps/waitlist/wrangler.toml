@@ -3,6 +3,7 @@ name = "front-desk-waitlist"
 main = "./.output/server/index.mjs"
 compatibility_date = "2025-04-01"
 compatibility_flags = ["nodejs_compat"]
+keep_vars = true
 
 [assets]
 binding = "ASSETS"

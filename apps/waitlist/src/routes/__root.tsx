@@ -9,6 +9,7 @@ import {
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
 import { NotFound } from "~/components/NotFound";
+import { PosthogProvider } from "~/components/posthog-provider";
 import { seo } from "~/utils/seo";
 import "../../../../packages/ui/src/styles/globals.css";
 
@@ -74,15 +75,17 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="w-screen min-h-screen text-sm">
-        <NextThemesProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-          enableColorScheme
-        >
-          {children}
-        </NextThemesProvider>
+        <PosthogProvider>
+          <NextThemesProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+            enableColorScheme
+          >
+            {children}
+          </NextThemesProvider>
+        </PosthogProvider>
         <Scripts />
       </body>
     </html>
