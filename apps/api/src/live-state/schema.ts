@@ -3,6 +3,7 @@ import {
   createRelations,
   createSchema,
   id,
+  number,
   object,
   reference,
   string,
@@ -29,6 +30,7 @@ const thread = object("thread", {
   name: string(),
   createdAt: timestamp(),
   discordChannelId: string().optional(),
+  priority: number().default(0),
 });
 
 const message = object("message", {
