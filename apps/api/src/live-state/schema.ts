@@ -31,6 +31,7 @@ const thread = object("thread", {
   createdAt: timestamp(),
   discordChannelId: string().nullable(),
   priority: number().default(0),
+  assignedUserId: reference("user.id").nullable(),
 });
 
 const message = object("message", {
@@ -69,6 +70,7 @@ const organizationUserRelations = createRelations(
 const threadRelations = createRelations(thread, ({ one, many }) => ({
   organization: one(organization, "organizationId"),
   messages: many(message, "threadId"),
+  assignedUser: one(user, "assignedUserId"),
 }));
 
 const messageRelations = createRelations(message, ({ one }) => ({
