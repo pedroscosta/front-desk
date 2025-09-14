@@ -99,7 +99,8 @@ client.on("messageCreate", async (message) => {
     threadId = ulid().toLowerCase();
     store.mutate.thread.insert({
       id: threadId,
-      organizationId: "01k32j4wwzyh3v6q56wr255jy7",
+      // TODO: get organization ID from integration settings
+      organizationId: "01k54wwfyz75nyatf3cp6w84h8",
       name: message.channel.name,
       createdAt: new Date(),
       discordChannelId: message.channel.id,

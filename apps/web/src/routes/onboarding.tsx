@@ -12,7 +12,7 @@ import { Icon } from "@workspace/ui/components/logo";
 import { Spinner } from "@workspace/ui/components/spinner";
 import { useState } from "react";
 import { z } from "zod";
-import { store } from "~/lib/live-state";
+import { mutate } from "~/lib/live-state";
 
 export const Route = createFileRoute("/onboarding")({
   component: RouteComponent,
@@ -62,7 +62,7 @@ function OnboardingForm() {
           setLoading(true);
 
           // TODO change this to a fetch call
-          await store.organization.create({
+          await mutate.organization.create({
             name: value.organizationName,
             slug: value.organizationSlug,
           });
