@@ -43,6 +43,16 @@ const message = object("message", {
   externalMessageId: string().nullable(),
 });
 
+const user = object("user", {
+  id: id(),
+  name: string(),
+  email: string(),
+  emailVerified: boolean().default(false),
+  image: string().nullable(),
+  createdAt: timestamp(),
+  updatedAt: timestamp(),
+});
+
 const organizationRelations = createRelations(organization, ({ many }) => ({
   organizationUsers: many(organizationUser, "organizationId"),
   threads: many(thread, "organizationId"),
@@ -52,6 +62,7 @@ const organizationUserRelations = createRelations(
   organizationUser,
   ({ one }) => ({
     organization: one(organization, "organizationId"),
+    user: one(user, "userId"),
   })
 );
 
@@ -70,6 +81,7 @@ export const schema = createSchema({
   organizationUser,
   thread,
   message,
+  user,
   // relations
   organizationUserRelations,
   organizationRelations,

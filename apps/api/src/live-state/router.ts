@@ -42,6 +42,7 @@ export const router = createRouter({
     organizationUser: privateRoute.createBasicRoute(schema.organizationUser),
     thread: privateRoute.createBasicRoute(schema.thread),
     message: privateRoute.createBasicRoute(schema.message),
+    user: privateRoute.createBasicRoute(schema.user),
   },
 });
 
