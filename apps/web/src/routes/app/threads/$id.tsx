@@ -1,5 +1,5 @@
 import { useLiveQuery } from "@live-state/sync/client";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
 import { InputBox, RichText } from "@workspace/ui/components/blocks/tiptap";
 import {
@@ -31,6 +31,7 @@ import {
 } from "@workspace/ui/components/tooltip";
 import { useAutoScroll } from "@workspace/ui/hooks/use-auto-scroll";
 import { cn, formatRelativeTime } from "@workspace/ui/lib/utils";
+import { CircleUser } from "lucide-react";
 import { ulid } from "ulid";
 import { mutate, query } from "~/lib/live-state";
 
@@ -60,11 +61,18 @@ const safeParseJSON = (raw: string) => {
 
 function RouteComponent() {
   const { id } = Route.useParams();
-  const navigate = useNavigate();
 
   const thread = useLiveQuery(
-    query.thread.where({ id }).include({ organization: true, messages: true })
+    query.thread
+      .where({ id })
+      .include({ organization: true, messages: true, assignedUser: true })
   )?.[0];
+
+  const organizationUsers = useLiveQuery(
+    query.organizationUser
+      .where({ organizationId: thread?.organizationId })
+      .include({ user: true })
+  );
 
   const { scrollRef, disableAutoScroll } = useAutoScroll({
     smooth: false,
@@ -206,6 +214,77 @@ function RouteComponent() {
                 </Combobox>
                 <TooltipContent>
                   Change priority
+                  {/* TODO add keyboard shortcut */}
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <Combobox
+                  items={[
+                    {
+                      value: null,
+                      label: "Unassigned",
+                    },
+                    ...(organizationUsers?.map((user) => ({
+                      value: user.userId,
+                      label: user.user.name,
+                    })) ?? []),
+                  ]}
+                  value={thread?.assignedUser?.id}
+                  onValueChange={(value) => {
+                    mutate.thread.update(id, {
+                      assignedUserId: value,
+                    });
+                  }}
+                >
+                  <ComboboxTrigger
+                    variant="unstyled"
+                    render={
+                      <TooltipTrigger
+                        render={
+                          <SidebarMenuButton
+                            size="sm"
+                            className={cn(
+                              "text-sm px-1.5 max-w-40 py-1 text-muted-foreground",
+                              thread?.assignedUser?.name && "text-primary"
+                            )}
+                          >
+                            {thread?.assignedUser ? (
+                              <Avatar className="size-5">
+                                <AvatarFallback>
+                                  {thread?.assignedUser.name[0]}
+                                </AvatarFallback>
+                              </Avatar>
+                            ) : (
+                              <CircleUser className="mx-0.5" />
+                            )}
+                            {thread?.assignedUser?.name ?? "Unassigned"}
+                          </SidebarMenuButton>
+                        }
+                      />
+                    }
+                  />
+
+                  <ComboboxContent className="w-48">
+                    <ComboboxInput placeholder="Search..." />
+                    <ComboboxEmpty />
+                    <ComboboxList>
+                      {(item: BaseItem) => (
+                        <ComboboxItem key={item.value} value={item.value}>
+                          {item.value ? (
+                            <Avatar className="size-5">
+                              <AvatarFallback>{item.label[0]}</AvatarFallback>
+                            </Avatar>
+                          ) : (
+                            <CircleUser className="mx-0.5" />
+                          )}
+                          {item.label}
+                        </ComboboxItem>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
+                <TooltipContent>
+                  Assign to
                   {/* TODO add keyboard shortcut */}
                 </TooltipContent>
               </Tooltip>
