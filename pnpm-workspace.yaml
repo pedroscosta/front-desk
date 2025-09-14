@@ -8,6 +8,5 @@ onlyBuiltDependencies:
   - core-js
   - core-js-pure
   - esbuild
-  - libpq
   - rolldown
   - unrs-resolver
