@@ -21,6 +21,9 @@ import {
 import {
   PriorityIndicator,
   PriorityText,
+  StatusIndicator,
+  StatusText,
+  statusValues,
 } from "@workspace/ui/components/indicator";
 import { SidebarMenuButton } from "@workspace/ui/components/sidebar";
 import {
@@ -153,6 +156,54 @@ function RouteComponent() {
           <div className="flex flex-col gap-2">
             <div className="text-muted-foreground text-xs">Properties</div>
             <div className="flex flex-col gap-1.5">
+              <Tooltip>
+                <Combobox
+                  items={Object.entries(statusValues).map(([key, value]) => ({
+                    value: key,
+                    label: value.label,
+                  }))}
+                  value={thread?.status ?? 0}
+                  onValueChange={(value) => {
+                    mutate.thread.update(id, {
+                      status: +value,
+                    });
+                  }}
+                >
+                  <ComboboxTrigger
+                    variant="unstyled"
+                    render={
+                      <TooltipTrigger
+                        render={
+                          <SidebarMenuButton
+                            size="sm"
+                            className="text-sm px-1.5 max-w-40 py-1"
+                          >
+                            <StatusIndicator status={thread?.status ?? 0} />
+                            <StatusText status={thread?.status ?? 0} />
+                          </SidebarMenuButton>
+                        }
+                      />
+                    }
+                  />
+
+                  <ComboboxContent className="w-48">
+                    <ComboboxInput placeholder="Search..." />
+                    <ComboboxEmpty />
+                    <ComboboxList>
+                      {(item: BaseItem) => (
+                        <ComboboxItem key={item.value} value={item.value}>
+                          <StatusIndicator status={+item.value} />
+                          {item.label}
+                        </ComboboxItem>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
+                <TooltipContent>
+                  Change priority
+                  {/* TODO add keyboard shortcut */}
+                </TooltipContent>
+              </Tooltip>
               <Tooltip>
                 <Combobox
                   items={[
