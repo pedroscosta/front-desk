@@ -6,7 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
+import {
+  PriorityIndicator,
+  StatusIndicator,
+} from "@workspace/ui/components/indicator";
+import { getFirstTextContent, safeParseJSON } from "@workspace/ui/lib/tiptap";
+import { formatRelativeTime } from "@workspace/ui/lib/utils";
 import { useAtomValue } from "jotai/react";
+import { CircleUser } from "lucide-react";
 import { activeOrganizationAtom } from "~/lib/atoms";
 import { query } from "~/lib/live-state";
 
@@ -14,14 +21,70 @@ export const Route = createFileRoute("/app/threads/")({
   component: RouteComponent,
 });
 
+const ListItem = ({ threadId }: { threadId: string }) => {
+  // TODO reverse sort messages by createdAt
+  const thread = useLiveQuery(
+    query.thread.one(threadId).include({
+      messages: true,
+      assignedUser: true,
+    })
+  );
+
+  return (
+    <Link
+      to={"/app/threads/$id"}
+      params={{ id: threadId }}
+      className="w-full max-w-5xl flex flex-col p-3 gap-2 hover:bg-muted"
+    >
+      <div className="flex justify-between">
+        <div className="flex items-center gap-2">
+          <Avatar className="size-5">
+            <AvatarFallback>P</AvatarFallback>
+          </Avatar>
+          <div>{thread?.name}</div>
+        </div>
+        <div className="flex items-center gap-2">
+          {thread?.assignedUser ? (
+            <Avatar className="size-5">
+              <AvatarFallback>{thread.assignedUser.name[0]}</AvatarFallback>
+            </Avatar>
+          ) : (
+            <CircleUser className="size-4" />
+          )}
+          <PriorityIndicator priority={thread?.priority ?? 0} />
+          <StatusIndicator status={thread?.status ?? 0} />
+        </div>
+      </div>
+      <div className="flex justify-between">
+        <span className="text-muted-foreground">
+          <span className="font-medium">
+            {thread?.messages?.[thread?.messages?.length - 1]?.author}:&nbsp;
+          </span>
+          <span className="truncate">
+            {getFirstTextContent(
+              safeParseJSON(
+                thread?.messages?.[thread?.messages?.length - 1]?.content ?? ""
+              )
+            )}
+          </span>
+        </span>
+        <div className="text-muted-foreground">
+          {formatRelativeTime(thread?.createdAt as Date)}
+        </div>
+      </div>
+    </Link>
+  );
+};
+
 function RouteComponent() {
   const currentOrg = useAtomValue(activeOrganizationAtom);
 
+  // Deep include thread messages and assigned user when live-state supports it
   const orgObj = useLiveQuery(
-    query.organization.where({ id: currentOrg!.id }).include({
+    query.organization.one(currentOrg!.id).include({
       threads: true,
     })
-  )?.[0];
+  );
 
   return (
     <>
@@ -32,23 +95,7 @@ function RouteComponent() {
         {orgObj?.threads
           .sort((a, b) => a.id.localeCompare(b.id))
           .map((thread) => (
-            <Link
-              key={thread.id}
-              to={"/app/threads/$id"}
-              params={{ id: thread.id }}
-              className="border w-full max-w-5xl flex flex-col p-2.5 gap-2 not-first:border-t-0"
-            >
-              <div className="flex justify-between">{thread.name}</div>
-              <div className="flex justify-between">
-                <span className="text-xs text-muted-foreground border rounded-full h-6 px-2 items-center flex gap-2">
-                  <span className="w-2 h-2 rounded-full bg-red-400" />
-                  Bug
-                </span>
-                <Avatar className="size-5">
-                  <AvatarFallback>P</AvatarFallback>
-                </Avatar>
-              </div>
-            </Link>
+            <ListItem key={thread.id} threadId={thread.id} />
           ))}
       </CardContent>
     </>
