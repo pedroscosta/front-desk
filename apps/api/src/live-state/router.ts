@@ -1,4 +1,4 @@
-import { router as createRouter, routeFactory } from "@repo/live-state/server";
+import { router as createRouter, routeFactory } from "@live-state/sync/server";
 import { ulid } from "ulid";
 import { z } from "zod";
 import { schema } from "./schema";

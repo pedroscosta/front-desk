@@ -1,6 +1,6 @@
 import "./env";
 
-import { expressAdapter, server, SQLStorage } from "@repo/live-state/server";
+import { expressAdapter, server, SQLStorage } from "@live-state/sync/server";
 import expressWs from "@wll8/express-ws";
 import { toNodeHandler } from "better-auth/node";
 import cors from "cors";

@@ -40,7 +40,7 @@
     "node": ">=20.18.0"
   },
   "dependencies": {
-    "@repo/live-state": "link:/Users/pedroscosta/projects/sync-poc/packages/live-state",
+    "@live-state/sync": "catalog:",
     "@wll8/express-ws": "^1.0.6",
     "better-auth": "^1.2.7",
     "cors": "^2.8.5",
@@ -48,6 +48,6 @@
     "express": "^4.21.2",
     "pg": "^8.15.6",
     "ulid": "^3.0.0",
-    "zod": "^3.24.2"
+    "zod": "catalog:"
   }
 }

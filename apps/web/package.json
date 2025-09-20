@@ -12,7 +12,7 @@
     "@faker-js/faker": "^10.0.0",
     "@fontsource-variable/intel-one-mono": "^5.2.1",
     "@fontsource-variable/inter": "^5.2.6",
-    "@live-state/sync": "link:/Users/pedroscosta/projects/sync-poc/packages/live-state",
+    "@live-state/sync": "catalog:",
     "@tanstack/react-form": "^1.11.1",
     "@tanstack/react-router": "^1.131.27",
     "@tanstack/react-router-devtools": "^1.131.27",

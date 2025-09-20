@@ -8,7 +8,7 @@ import {
   reference,
   string,
   timestamp,
-} from "@repo/live-state";
+} from "@live-state/sync";
 
 const organization = object("organization", {
   id: id(),
