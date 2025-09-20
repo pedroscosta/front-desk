@@ -33,6 +33,7 @@ import {
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip";
 import { useAutoScroll } from "@workspace/ui/hooks/use-auto-scroll";
+import { safeParseJSON } from "@workspace/ui/lib/tiptap";
 import { cn, formatRelativeTime } from "@workspace/ui/lib/utils";
 import { CircleUser } from "lucide-react";
 import { ulid } from "ulid";
@@ -41,26 +42,6 @@ import { mutate, query } from "~/lib/live-state";
 export const Route = createFileRoute("/app/threads/$id")({
   component: RouteComponent,
 });
-
-const safeParseJSON = (raw: string) => {
-  try {
-    const parsed = JSON.parse(raw);
-    // Accept common shapes produced by our editor:
-    if (Array.isArray(parsed)) return parsed;
-    if (parsed && typeof parsed === "object" && "content" in parsed) {
-      // e.g. a full doc { type: 'doc', content: [...] }
-      // Normalize to content[] to match our usage.
-      return (parsed as any).content ?? [];
-    }
-  } catch {}
-  // Fallback: wrap plain text in a single paragraph node.
-  return [
-    {
-      type: "paragraph",
-      content: [{ type: "text", text: String(raw) }],
-    },
-  ];
-};
 
 function RouteComponent() {
   const { id } = Route.useParams();
