@@ -1,12 +1,10 @@
 packages:
   - apps/*
   - packages/*
-onlyBuiltDependencies:
-  - '@biomejs/biome'
-  - '@parcel/watcher'
-  - '@tailwindcss/oxide'
-  - core-js
-  - core-js-pure
-  - esbuild
-  - rolldown
-  - unrs-resolver
+catalog:
+  '@live-state/sync': ^0.0.4-beta.2
+  zod: 4.1.9
+ignoredBuiltDependencies:
+  - libpq
+  - sharp
+  - workerd
