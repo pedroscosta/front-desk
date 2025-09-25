@@ -24,8 +24,8 @@ const headerVariants = cva(
         transparent: "bg-inherit",
       },
       size: {
-        default: "h-10 p-2.5",
-        sm: "h-8 p-1",
+        default: "h-10 px-5",
+        sm: "h-8 px-1",
       },
     },
     defaultVariants: {
