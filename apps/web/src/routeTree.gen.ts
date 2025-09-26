@@ -13,9 +13,11 @@ import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AppIndexRouteImport } from './routes/app/index'
-import { Route as AppThreadsIndexRouteImport } from './routes/app/threads/index'
-import { Route as AppThreadsIdRouteImport } from './routes/app/threads/$id'
+import { Route as AppMainRouteRouteImport } from './routes/app/_main/route'
+import { Route as AppMainIndexRouteImport } from './routes/app/_main/index'
+import { Route as AppSettingsOrganizationIndexRouteImport } from './routes/app/settings/organization/index'
+import { Route as AppMainThreadsIndexRouteImport } from './routes/app/_main/threads/index'
+import { Route as AppMainThreadsIdRouteImport } from './routes/app/_main/threads/$id'
 
 const SignUpRoute = SignUpRouteImport.update({
   id: '/sign-up',
@@ -37,38 +39,50 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppIndexRoute = AppIndexRouteImport.update({
+const AppMainRouteRoute = AppMainRouteRouteImport.update({
+  id: '/_main',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppMainIndexRoute = AppMainIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AppRouteRoute,
+  getParentRoute: () => AppMainRouteRoute,
 } as any)
-const AppThreadsIndexRoute = AppThreadsIndexRouteImport.update({
+const AppSettingsOrganizationIndexRoute =
+  AppSettingsOrganizationIndexRouteImport.update({
+    id: '/settings/organization/',
+    path: '/settings/organization/',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppMainThreadsIndexRoute = AppMainThreadsIndexRouteImport.update({
   id: '/threads/',
   path: '/threads/',
-  getParentRoute: () => AppRouteRoute,
+  getParentRoute: () => AppMainRouteRoute,
 } as any)
-const AppThreadsIdRoute = AppThreadsIdRouteImport.update({
+const AppMainThreadsIdRoute = AppMainThreadsIdRouteImport.update({
   id: '/threads/$id',
   path: '/threads/$id',
-  getParentRoute: () => AppRouteRoute,
+  getParentRoute: () => AppMainRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/app': typeof AppRouteRouteWithChildren
+  '/app': typeof AppMainRouteRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
-  '/app/': typeof AppIndexRoute
-  '/app/threads/$id': typeof AppThreadsIdRoute
-  '/app/threads': typeof AppThreadsIndexRoute
+  '/app/': typeof AppMainIndexRoute
+  '/app/threads/$id': typeof AppMainThreadsIdRoute
+  '/app/threads': typeof AppMainThreadsIndexRoute
+  '/app/settings/organization': typeof AppSettingsOrganizationIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app': typeof AppMainIndexRoute
   '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
-  '/app': typeof AppIndexRoute
-  '/app/threads/$id': typeof AppThreadsIdRoute
-  '/app/threads': typeof AppThreadsIndexRoute
+  '/app/threads/$id': typeof AppMainThreadsIdRoute
+  '/app/threads': typeof AppMainThreadsIndexRoute
+  '/app/settings/organization': typeof AppSettingsOrganizationIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -76,9 +90,11 @@ export interface FileRoutesById {
   '/app': typeof AppRouteRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
-  '/app/': typeof AppIndexRoute
-  '/app/threads/$id': typeof AppThreadsIdRoute
-  '/app/threads/': typeof AppThreadsIndexRoute
+  '/app/_main': typeof AppMainRouteRouteWithChildren
+  '/app/_main/': typeof AppMainIndexRoute
+  '/app/_main/threads/$id': typeof AppMainThreadsIdRoute
+  '/app/_main/threads/': typeof AppMainThreadsIndexRoute
+  '/app/settings/organization/': typeof AppSettingsOrganizationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -90,23 +106,27 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/threads/$id'
     | '/app/threads'
+    | '/app/settings/organization'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/app'
     | '/onboarding'
     | '/sign-up'
-    | '/app'
     | '/app/threads/$id'
     | '/app/threads'
+    | '/app/settings/organization'
   id:
     | '__root__'
     | '/'
     | '/app'
     | '/onboarding'
     | '/sign-up'
-    | '/app/'
-    | '/app/threads/$id'
-    | '/app/threads/'
+    | '/app/_main'
+    | '/app/_main/'
+    | '/app/_main/threads/$id'
+    | '/app/_main/threads/'
+    | '/app/settings/organization/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -146,40 +166,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/app/': {
-      id: '/app/'
+    '/app/_main': {
+      id: '/app/_main'
+      path: ''
+      fullPath: '/app'
+      preLoaderRoute: typeof AppMainRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/_main/': {
+      id: '/app/_main/'
       path: '/'
       fullPath: '/app/'
-      preLoaderRoute: typeof AppIndexRouteImport
+      preLoaderRoute: typeof AppMainIndexRouteImport
+      parentRoute: typeof AppMainRouteRoute
+    }
+    '/app/settings/organization/': {
+      id: '/app/settings/organization/'
+      path: '/settings/organization'
+      fullPath: '/app/settings/organization'
+      preLoaderRoute: typeof AppSettingsOrganizationIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/app/threads/': {
-      id: '/app/threads/'
+    '/app/_main/threads/': {
+      id: '/app/_main/threads/'
       path: '/threads'
       fullPath: '/app/threads'
-      preLoaderRoute: typeof AppThreadsIndexRouteImport
-      parentRoute: typeof AppRouteRoute
+      preLoaderRoute: typeof AppMainThreadsIndexRouteImport
+      parentRoute: typeof AppMainRouteRoute
     }
-    '/app/threads/$id': {
-      id: '/app/threads/$id'
+    '/app/_main/threads/$id': {
+      id: '/app/_main/threads/$id'
       path: '/threads/$id'
       fullPath: '/app/threads/$id'
-      preLoaderRoute: typeof AppThreadsIdRouteImport
-      parentRoute: typeof AppRouteRoute
+      preLoaderRoute: typeof AppMainThreadsIdRouteImport
+      parentRoute: typeof AppMainRouteRoute
     }
   }
 }
 
+interface AppMainRouteRouteChildren {
+  AppMainIndexRoute: typeof AppMainIndexRoute
+  AppMainThreadsIdRoute: typeof AppMainThreadsIdRoute
+  AppMainThreadsIndexRoute: typeof AppMainThreadsIndexRoute
+}
+
+const AppMainRouteRouteChildren: AppMainRouteRouteChildren = {
+  AppMainIndexRoute: AppMainIndexRoute,
+  AppMainThreadsIdRoute: AppMainThreadsIdRoute,
+  AppMainThreadsIndexRoute: AppMainThreadsIndexRoute,
+}
+
+const AppMainRouteRouteWithChildren = AppMainRouteRoute._addFileChildren(
+  AppMainRouteRouteChildren,
+)
+
 interface AppRouteRouteChildren {
-  AppIndexRoute: typeof AppIndexRoute
-  AppThreadsIdRoute: typeof AppThreadsIdRoute
-  AppThreadsIndexRoute: typeof AppThreadsIndexRoute
+  AppMainRouteRoute: typeof AppMainRouteRouteWithChildren
+  AppSettingsOrganizationIndexRoute: typeof AppSettingsOrganizationIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
-  AppIndexRoute: AppIndexRoute,
-  AppThreadsIdRoute: AppThreadsIdRoute,
-  AppThreadsIndexRoute: AppThreadsIndexRoute,
+  AppMainRouteRoute: AppMainRouteRouteWithChildren,
+  AppSettingsOrganizationIndexRoute: AppSettingsOrganizationIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

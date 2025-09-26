@@ -39,7 +39,7 @@ import { CircleUser } from "lucide-react";
 import { ulid } from "ulid";
 import { mutate, query } from "~/lib/live-state";
 
-export const Route = createFileRoute("/app/threads/$id")({
+export const Route = createFileRoute("/app/_main/threads/$id")({
   component: RouteComponent,
 });
 
