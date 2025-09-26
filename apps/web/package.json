@@ -9,6 +9,7 @@
     "start": "NODE_ENV=production node .output/server/index.mjs"
   },
   "dependencies": {
+    "@bradenmacdonald/s3-lite-client": "jsr:^0.9.3",
     "@faker-js/faker": "^10.0.0",
     "@fontsource-variable/intel-one-mono": "^5.2.1",
     "@fontsource-variable/inter": "^5.2.6",
@@ -29,6 +30,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hotkeys-hook": "^5.1.0",
+    "s3-lite-client": "link:jsr:@bradenmacdonald/s3-lite-client",
     "tailwind-merge": "^2.6.0",
     "ulid": "^3.0.0",
     "zod": "^3.24.2"

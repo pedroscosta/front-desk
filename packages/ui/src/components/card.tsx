@@ -8,7 +8,7 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="card"
       className={cn(
         "text-card-foreground flex flex-col rounded-md border overflow-clip",
-        className
+        className,
       )}
       {...props}
     />
@@ -32,7 +32,7 @@ const headerVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 function CardHeader({
