@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useMatches } from "@tanstack/react-router";
 import {
   Sidebar,
   SidebarContent,
@@ -17,12 +17,14 @@ const items: { title: string; url: string; icon: React.ComponentType<any> }[] =
   [
     {
       title: "Threads",
-      url: "/app/threads",
+      url: "/app/threads/",
       icon: MessagesSquare,
     },
   ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const matches = useMatches();
+
   return (
     <Sidebar variant="inset" className="bg-none">
       <SidebarHeader className="bg-none">
@@ -35,7 +37,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton
+                    asChild
+                    data-active={matches.some(
+                      (match) => match.pathname === item.url,
+                    )}
+                  >
                     <Link to={item.url}>
                       <item.icon />
                       <span>{item.title}</span>

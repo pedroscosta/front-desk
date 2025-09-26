@@ -13,7 +13,9 @@ import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppSettingsRouteRouteImport } from './routes/app/settings/route'
 import { Route as AppMainRouteRouteImport } from './routes/app/_main/route'
+import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
 import { Route as AppMainIndexRouteImport } from './routes/app/_main/index'
 import { Route as AppSettingsOrganizationIndexRouteImport } from './routes/app/settings/organization/index'
 import { Route as AppMainThreadsIndexRouteImport } from './routes/app/_main/threads/index'
@@ -39,9 +41,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppSettingsRouteRoute = AppSettingsRouteRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppMainRouteRoute = AppMainRouteRouteImport.update({
   id: '/_main',
   getParentRoute: () => AppRouteRoute,
+} as any)
+const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppSettingsRouteRoute,
 } as any)
 const AppMainIndexRoute = AppMainIndexRouteImport.update({
   id: '/',
@@ -50,9 +62,9 @@ const AppMainIndexRoute = AppMainIndexRouteImport.update({
 } as any)
 const AppSettingsOrganizationIndexRoute =
   AppSettingsOrganizationIndexRouteImport.update({
-    id: '/settings/organization/',
-    path: '/settings/organization/',
-    getParentRoute: () => AppRouteRoute,
+    id: '/organization/',
+    path: '/organization/',
+    getParentRoute: () => AppSettingsRouteRoute,
   } as any)
 const AppMainThreadsIndexRoute = AppMainThreadsIndexRouteImport.update({
   id: '/threads/',
@@ -70,7 +82,9 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppMainRouteRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
+  '/app/settings': typeof AppSettingsRouteRouteWithChildren
   '/app/': typeof AppMainIndexRoute
+  '/app/settings/': typeof AppSettingsIndexRoute
   '/app/threads/$id': typeof AppMainThreadsIdRoute
   '/app/threads': typeof AppMainThreadsIndexRoute
   '/app/settings/organization': typeof AppSettingsOrganizationIndexRoute
@@ -80,6 +94,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppMainIndexRoute
   '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
+  '/app/settings': typeof AppSettingsIndexRoute
   '/app/threads/$id': typeof AppMainThreadsIdRoute
   '/app/threads': typeof AppMainThreadsIndexRoute
   '/app/settings/organization': typeof AppSettingsOrganizationIndexRoute
@@ -91,7 +106,9 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRoute
   '/sign-up': typeof SignUpRoute
   '/app/_main': typeof AppMainRouteRouteWithChildren
+  '/app/settings': typeof AppSettingsRouteRouteWithChildren
   '/app/_main/': typeof AppMainIndexRoute
+  '/app/settings/': typeof AppSettingsIndexRoute
   '/app/_main/threads/$id': typeof AppMainThreadsIdRoute
   '/app/_main/threads/': typeof AppMainThreadsIndexRoute
   '/app/settings/organization/': typeof AppSettingsOrganizationIndexRoute
@@ -103,7 +120,9 @@ export interface FileRouteTypes {
     | '/app'
     | '/onboarding'
     | '/sign-up'
+    | '/app/settings'
     | '/app/'
+    | '/app/settings/'
     | '/app/threads/$id'
     | '/app/threads'
     | '/app/settings/organization'
@@ -113,6 +132,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/onboarding'
     | '/sign-up'
+    | '/app/settings'
     | '/app/threads/$id'
     | '/app/threads'
     | '/app/settings/organization'
@@ -123,7 +143,9 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/sign-up'
     | '/app/_main'
+    | '/app/settings'
     | '/app/_main/'
+    | '/app/settings/'
     | '/app/_main/threads/$id'
     | '/app/_main/threads/'
     | '/app/settings/organization/'
@@ -166,12 +188,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/_main': {
       id: '/app/_main'
       path: ''
       fullPath: '/app'
       preLoaderRoute: typeof AppMainRouteRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/app/settings/': {
+      id: '/app/settings/'
+      path: '/'
+      fullPath: '/app/settings/'
+      preLoaderRoute: typeof AppSettingsIndexRouteImport
+      parentRoute: typeof AppSettingsRouteRoute
     }
     '/app/_main/': {
       id: '/app/_main/'
@@ -182,10 +218,10 @@ declare module '@tanstack/react-router' {
     }
     '/app/settings/organization/': {
       id: '/app/settings/organization/'
-      path: '/settings/organization'
+      path: '/organization'
       fullPath: '/app/settings/organization'
       preLoaderRoute: typeof AppSettingsOrganizationIndexRouteImport
-      parentRoute: typeof AppRouteRoute
+      parentRoute: typeof AppSettingsRouteRoute
     }
     '/app/_main/threads/': {
       id: '/app/_main/threads/'
@@ -220,14 +256,27 @@ const AppMainRouteRouteWithChildren = AppMainRouteRoute._addFileChildren(
   AppMainRouteRouteChildren,
 )
 
+interface AppSettingsRouteRouteChildren {
+  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
+  AppSettingsOrganizationIndexRoute: typeof AppSettingsOrganizationIndexRoute
+}
+
+const AppSettingsRouteRouteChildren: AppSettingsRouteRouteChildren = {
+  AppSettingsIndexRoute: AppSettingsIndexRoute,
+  AppSettingsOrganizationIndexRoute: AppSettingsOrganizationIndexRoute,
+}
+
+const AppSettingsRouteRouteWithChildren =
+  AppSettingsRouteRoute._addFileChildren(AppSettingsRouteRouteChildren)
+
 interface AppRouteRouteChildren {
   AppMainRouteRoute: typeof AppMainRouteRouteWithChildren
-  AppSettingsOrganizationIndexRoute: typeof AppSettingsOrganizationIndexRoute
+  AppSettingsRouteRoute: typeof AppSettingsRouteRouteWithChildren
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppMainRouteRoute: AppMainRouteRouteWithChildren,
-  AppSettingsOrganizationIndexRoute: AppSettingsOrganizationIndexRoute,
+  AppSettingsRouteRoute: AppSettingsRouteRouteWithChildren,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
