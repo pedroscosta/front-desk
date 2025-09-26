@@ -1,4 +1,4 @@
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,12 +25,12 @@ export function OrgSwitcher() {
   const { organizationUser } = useOrganizationSwitcher();
 
   const [activeOrganization, setActiveOrganization] = useAtom(
-    activeOrganizationAtom
+    activeOrganizationAtom,
   );
 
   if (!activeOrganization) {
     setActiveOrganization(
-      Object.values(organizationUser)[0].organization as any
+      Object.values(organizationUser)[0].organization as any,
     );
   }
 
@@ -81,6 +81,9 @@ export function OrgSwitcher() {
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
+            <DropdownMenuItem className="gap-2 p-2" asChild>
+              <Link to="/app/settings">Settings</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem
               className="gap-2 p-2"
               onClick={() =>
