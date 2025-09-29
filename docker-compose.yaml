@@ -1,11 +1,11 @@
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:18
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: front-desk
     volumes:
-      - ./.postgres-data:/var/lib/postgresql/data
+      - ./.postgres-data:/var/lib/postgresql
     ports:
       - "5442:5432"
