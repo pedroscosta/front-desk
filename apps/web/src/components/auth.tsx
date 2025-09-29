@@ -45,7 +45,7 @@ export const SignInForm = () => {
             setLoading(false);
             setError(ctx.error.message);
           },
-        }
+        },
       );
     },
   });
@@ -67,9 +67,8 @@ export const SignInForm = () => {
         }}
         className="flex flex-col gap-4 w-full"
       >
-        <Field
-          name="email"
-          children={(field) => (
+        <Field name="email">
+          {(field) => (
             <FormItem field={field}>
               <FormLabel>Email</FormLabel>
               <FormControl>
@@ -83,10 +82,9 @@ export const SignInForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
-        <Field
-          name="password"
-          children={(field) => (
+        </Field>
+        <Field name="password">
+          {(field) => (
             <FormItem field={field}>
               <FormLabel>Password</FormLabel>
               <FormControl>
@@ -101,7 +99,7 @@ export const SignInForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        </Field>
         <Button type="submit" className="mt-6 w-full" disabled={loading}>
           {loading ? <Spinner /> : null} Sign In
         </Button>
@@ -152,7 +150,7 @@ export const SignUpForm = () => {
             setLoading(false);
             setError(ctx.error.message);
           },
-        }
+        },
       );
     },
   });
@@ -174,9 +172,8 @@ export const SignUpForm = () => {
         }}
         className="flex flex-col gap-4 w-full"
       >
-        <Field
-          name="name"
-          children={(field) => (
+        <Field name="name">
+          {(field) => (
             <FormItem field={field}>
               <FormLabel>Name</FormLabel>
               <FormControl>
@@ -190,10 +187,9 @@ export const SignUpForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
-        <Field
-          name="email"
-          children={(field) => (
+        </Field>
+        <Field name="email">
+          {(field) => (
             <FormItem field={field}>
               <FormLabel>Email</FormLabel>
               <FormControl>
@@ -207,10 +203,9 @@ export const SignUpForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
-        <Field
-          name="password"
-          children={(field) => (
+        </Field>
+        <Field name="password">
+          {(field) => (
             <FormItem field={field}>
               <FormLabel>Password</FormLabel>
               <FormControl>
@@ -225,10 +220,9 @@ export const SignUpForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
-        <Field
-          name="confirmPassword"
-          children={(field) => (
+        </Field>
+        <Field name="confirmPassword">
+          {(field) => (
             <FormItem field={field}>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
@@ -243,7 +237,7 @@ export const SignUpForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        </Field>
         <Button type="submit" className="mt-6 w-full" disabled={loading}>
           {loading ? <Spinner /> : null} Sign Up
         </Button>
