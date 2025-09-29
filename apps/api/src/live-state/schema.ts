@@ -30,6 +30,7 @@ const thread = object("thread", {
   id: id(),
   organizationId: reference("organization.id"),
   name: string(),
+  authorId: reference("author.id"),
   createdAt: timestamp(),
   discordChannelId: string().nullable(),
   status: number().default(0),
@@ -40,11 +41,17 @@ const thread = object("thread", {
 const message = object("message", {
   id: id(),
   threadId: reference("thread.id"),
-  author: string(),
+  authorId: reference("author.id"),
   content: string(),
   createdAt: timestamp(),
   origin: string().nullable(),
   externalMessageId: string().nullable(),
+});
+
+const author = object("author", {
+  id: id(),
+  name: string(),
+  userId: reference("user.id").nullable(),
 });
 
 const user = object("user", {
@@ -74,10 +81,16 @@ const threadRelations = createRelations(thread, ({ one, many }) => ({
   organization: one(organization, "organizationId"),
   messages: many(message, "threadId"),
   assignedUser: one(user, "assignedUserId"),
+  author: one(author, "authorId"),
 }));
 
 const messageRelations = createRelations(message, ({ one }) => ({
   thread: one(thread, "threadId"),
+  author: one(author, "authorId"),
+}));
+
+const authorRelations = createRelations(author, ({ one }) => ({
+  user: one(user, "userId", false),
 }));
 
 export const schema = createSchema({
@@ -86,10 +99,12 @@ export const schema = createSchema({
   organizationUser,
   thread,
   message,
+  author,
   user,
   // relations
   organizationUserRelations,
   organizationRelations,
   threadRelations,
   messageRelations,
+  authorRelations,
 });
