@@ -1,5 +1,5 @@
 import { useLiveQuery } from "@live-state/sync/client";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
 import { InputBox, RichText } from "@workspace/ui/components/blocks/tiptap";
 import {
@@ -44,18 +44,19 @@ export const Route = createFileRoute("/app/_main/threads/$id")({
 });
 
 function RouteComponent() {
+  const { user } = getRouteApi("/app").useLoaderData();
   const { id } = Route.useParams();
 
   const thread = useLiveQuery(
     query.thread
       .where({ id })
-      .include({ organization: true, messages: true, assignedUser: true })
+      .include({ organization: true, messages: true, assignedUser: true }),
   )?.[0];
 
   const organizationUsers = useLiveQuery(
     query.organizationUser
       .where({ organizationId: thread?.organizationId })
-      .include({ user: true })
+      .include({ user: true }),
   );
 
   const { scrollRef, disableAutoScroll } = useAutoScroll({
@@ -84,21 +85,23 @@ function RouteComponent() {
                   key={message.id}
                   className={cn(
                     "relative before:w-[1px] before:h-4 before:left-4 before:absolute before:-top-4 not-first:before:bg-border",
-                    !message.origin && "border-[#2662D9]/20"
+                    !message.origin && "border-[#2662D9]/20",
                   )}
                 >
                   {/* TODO: update the way it's checking if it's an message from the current user */}
                   <CardHeader
                     size="sm"
                     className={cn(
-                      !message.origin && "bg-[#2662D9]/15 border-[#2662D9]/20"
+                      !message.origin && "bg-[#2662D9]/15 border-[#2662D9]/20",
                     )}
                   >
                     <CardTitle>
                       <Avatar className="size-5">
-                        <AvatarFallback>{message.author[0]}</AvatarFallback>
+                        {/* TODO update when live-state supports deep includes */}
+                        <AvatarFallback>P</AvatarFallback>
                       </Avatar>
-                      <p>{message.author}</p>
+                      {/* TODO update when live-state supports deep includes */}
+                      <p>message.author.name</p>
                       <p className="text-muted-foreground">
                         {formatRelativeTime(message.createdAt as Date)}
                       </p>
@@ -121,9 +124,22 @@ function RouteComponent() {
           <InputBox
             className="bottom-2.5 w-full shadow-lg bg-[#1B1B1E]"
             onSubmit={(value) => {
+              const author = query.author.first({ userId: user.id }).get();
+              let authorId = author?.id;
+
+              if (!authorId) {
+                authorId = ulid().toLowerCase();
+
+                mutate.author.insert({
+                  id: ulid().toLowerCase(),
+                  userId: user.id,
+                  name: user.name,
+                });
+              }
+
               mutate.message.insert({
                 id: ulid().toLowerCase(),
-                author: "Pedro",
+                authorId: authorId,
                 content: JSON.stringify(value),
                 threadId: id,
                 createdAt: new Date(),
@@ -277,7 +293,7 @@ function RouteComponent() {
                             size="sm"
                             className={cn(
                               "text-sm px-1.5 max-w-40 py-1 text-muted-foreground",
-                              thread?.assignedUser?.name && "text-primary"
+                              thread?.assignedUser?.name && "text-primary",
                             )}
                           >
                             {thread?.assignedUser ? (
