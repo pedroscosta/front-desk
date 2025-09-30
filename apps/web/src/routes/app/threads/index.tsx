@@ -2,18 +2,26 @@ import { useLiveQuery } from "@live-state/sync/client";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
 import {
+  Filter,
+  FilterOptions,
+  FilterValue,
+} from "@workspace/ui/components/blocks/filter";
+import {
   CardContent,
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
 import {
   PriorityIndicator,
+  priorityText,
   StatusIndicator,
+  statusValues,
 } from "@workspace/ui/components/indicator";
 import { getFirstTextContent, safeParseJSON } from "@workspace/ui/lib/tiptap";
 import { formatRelativeTime } from "@workspace/ui/lib/utils";
 import { useAtomValue } from "jotai/react";
 import { CircleUser } from "lucide-react";
+import { useState } from "react";
 import { activeOrganizationAtom } from "~/lib/atoms";
 import { query } from "~/lib/live-state";
 
@@ -27,7 +35,7 @@ const ListItem = ({ threadId }: { threadId: string }) => {
     query.thread.one(threadId).include({
       messages: true,
       assignedUser: true,
-    })
+    }),
   );
 
   return (
@@ -63,8 +71,8 @@ const ListItem = ({ threadId }: { threadId: string }) => {
           <span className="truncate">
             {getFirstTextContent(
               safeParseJSON(
-                thread?.messages?.[thread?.messages?.length - 1]?.content ?? ""
-              )
+                thread?.messages?.[thread?.messages?.length - 1]?.content ?? "",
+              ),
             )}
           </span>
         </span>
@@ -79,20 +87,86 @@ const ListItem = ({ threadId }: { threadId: string }) => {
 function RouteComponent() {
   const currentOrg = useAtomValue(activeOrganizationAtom);
 
-  // Deep include thread messages and assigned user when live-state supports it
-  const orgObj = useLiveQuery(
-    query.organization.one(currentOrg!.id).include({
-      threads: true,
-    })
+  const organizationUsers = useLiveQuery(
+    query.organizationUser
+      .where({ organizationId: currentOrg!.id })
+      .include({ user: true }),
   );
+
+  const [filter, setFilter] = useState<FilterValue>({});
+
+  let threadsQuery = query.thread.where({
+    organizationId: currentOrg!.id,
+  });
+
+  if (filter && Object.keys(filter).some((key) => filter[key]?.length > 0)) {
+    threadsQuery = threadsQuery.where(
+      Object.fromEntries(
+        Object.entries(filter).map(([key, values]) => [key, { $in: values }]),
+      ),
+    );
+  }
+
+  const filterOptions: FilterOptions = {
+    status: {
+      label: "Status",
+      key: "status",
+      icon: <StatusIndicator status={0} />,
+      options: Object.entries(statusValues).map(([statusKey, value]) => {
+        const status = Number(statusKey);
+        return {
+          label: value.label,
+          value: status,
+          icon: <StatusIndicator status={status} />,
+        };
+      }),
+    },
+    priority: {
+      label: "Priority",
+      key: "priority",
+      icon: <PriorityIndicator priority={2} />,
+      options: Object.entries(priorityText).map(([priorityKey, value]) => {
+        const priority = Number(priorityKey);
+        return {
+          label: value,
+          value: priority,
+          icon: <PriorityIndicator priority={priority} />,
+        };
+      }),
+    },
+    assignedUserId: {
+      label: "Assigned User",
+      key: "assignedUserId",
+      icon: <CircleUser className="size-4" />,
+      options: (organizationUsers ?? []).map((user) => ({
+        label: user.user.name,
+        value: user.userId,
+        icon: (
+          <Avatar className="size-5">
+            <AvatarFallback>{user.user.name[0]}</AvatarFallback>
+          </Avatar>
+        ),
+      })),
+    },
+  };
+
+  // Deep include thread messages and assigned user when live-state supports it
+  const threads = useLiveQuery(threadsQuery);
 
   return (
     <>
       <CardHeader>
-        <CardTitle className="justify-self-center">Threads</CardTitle>
+        <CardTitle className="gap-4">
+          Threads
+          <Filter
+            options={filterOptions}
+            value={filter}
+            onValueChange={setFilter}
+          />
+        </CardTitle>
       </CardHeader>
       <CardContent className="overflow-y-auto gap-0 items-center">
-        {orgObj?.threads
+        {threads
           .sort((a, b) => a.id.localeCompare(b.id))
           .map((thread) => (
             <ListItem key={thread.id} threadId={thread.id} />
