@@ -1,12 +1,15 @@
+import type { InferLiveObject } from "@live-state/sync";
 import { useLiveQuery } from "@live-state/sync/client";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
 import {
   Filter,
-  FilterOptions,
-  FilterValue,
+  type FilterOptions,
+  type FilterValue,
 } from "@workspace/ui/components/blocks/filter";
+import { Button } from "@workspace/ui/components/button";
 import {
+  CardAction,
   CardContent,
   CardFooter,
   CardHeader,
@@ -18,10 +21,34 @@ import {
   StatusIndicator,
   statusValues,
 } from "@workspace/ui/components/indicator";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@workspace/ui/components/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@workspace/ui/components/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@workspace/ui/components/tooltip";
 import { getFirstTextContent, safeParseJSON } from "@workspace/ui/lib/tiptap";
 import { formatRelativeTime } from "@workspace/ui/lib/utils";
+import type { schema } from "api/schema";
 import { useAtomValue } from "jotai/react";
-import { CircleUser } from "lucide-react";
+import {
+  ArrowDownWideNarrow,
+  ArrowUpNarrowWide,
+  CircleUser,
+  Settings2,
+} from "lucide-react";
 import { useState } from "react";
 import { CreateThread } from "~/components/devtools/create-thread";
 import { activeOrganizationAtom } from "~/lib/atoms";
@@ -68,7 +95,9 @@ const ListItem = ({ threadId }: { threadId: string }) => {
       <div className="flex justify-between">
         <span className="text-muted-foreground">
           <span className="font-medium">
-            {thread?.messages?.[thread?.messages?.length - 1]?.author}:&nbsp;
+            {/* TODO update when live-state supports deep includes */}
+            {/* {thread?.messages?.[thread?.messages?.length - 1]?.author?.name} */}
+            Author:&nbsp;
           </span>
           <span className="truncate">
             {getFirstTextContent(
@@ -85,6 +114,13 @@ const ListItem = ({ threadId }: { threadId: string }) => {
     </Link>
   );
 };
+
+const orderByOptions = [
+  { label: "Created", value: "createdAt" },
+  { label: "Last message", value: "updatedAt" }, // TODO fix when live-state supports deep sorting
+  { label: "Priority", value: "priority" },
+  { label: "Status", value: "status" },
+];
 
 function RouteComponent() {
   const currentOrg = useAtomValue(activeOrganizationAtom);
@@ -152,8 +188,16 @@ function RouteComponent() {
     },
   };
 
-  // Deep include thread messages and assigned user when live-state supports it
-  const threads = useLiveQuery(threadsQuery);
+  const [orderBy, setOrderBy] = useState<string>("createdAt");
+  const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("asc");
+
+  // TODO Deep include thread messages and assigned user when live-state supports it
+  const threads = useLiveQuery(
+    threadsQuery.orderBy(
+      orderBy as keyof InferLiveObject<typeof schema.thread>,
+      orderDirection,
+    ),
+  );
 
   return (
     <>
@@ -166,13 +210,68 @@ function RouteComponent() {
             onValueChange={setFilter}
           />
         </CardTitle>
+        <CardAction side="right">
+          <Popover>
+            <PopoverTrigger>
+              <Button variant="ghost" size="sm">
+                <Settings2 />
+                Display
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="p-4 flex flex-col gap-4"
+              positionerProps={{ align: "end" }}
+            >
+              <div className="flex w-full items-center gap-2">
+                <div className="mr-auto">Order by</div>
+                <Select
+                  value={orderBy}
+                  onValueChange={(value) => setOrderBy(value as string)}
+                  items={orderByOptions}
+                >
+                  <SelectTrigger className="w-48" data-size="sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {orderByOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setOrderDirection(
+                            orderDirection === "asc" ? "desc" : "asc",
+                          )
+                        }
+                        className="size-8"
+                      >
+                        {orderDirection === "asc" ? (
+                          <ArrowDownWideNarrow />
+                        ) : (
+                          <ArrowUpNarrowWide />
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Change order direction</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </CardAction>
       </CardHeader>
       <CardContent className="overflow-y-auto gap-0 items-center">
-        {threads
-          .sort((a, b) => a.id.localeCompare(b.id))
-          .map((thread) => (
-            <ListItem key={thread.id} threadId={thread.id} />
-          ))}
+        {threads.map((thread) => (
+          <ListItem key={thread.id} threadId={thread.id} />
+        ))}
       </CardContent>
       {import.meta.env.MODE === "development" && (
         <CardFooter>
