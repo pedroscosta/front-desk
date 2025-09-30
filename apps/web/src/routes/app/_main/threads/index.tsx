@@ -8,6 +8,7 @@ import {
 } from "@workspace/ui/components/blocks/filter";
 import {
   CardContent,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
@@ -22,6 +23,7 @@ import { formatRelativeTime } from "@workspace/ui/lib/utils";
 import { useAtomValue } from "jotai/react";
 import { CircleUser } from "lucide-react";
 import { useState } from "react";
+import { CreateThread } from "~/components/devtools/create-thread";
 import { activeOrganizationAtom } from "~/lib/atoms";
 import { query } from "~/lib/live-state";
 
@@ -172,6 +174,11 @@ function RouteComponent() {
             <ListItem key={thread.id} threadId={thread.id} />
           ))}
       </CardContent>
+      {import.meta.env.MODE === "development" && (
+        <CardFooter>
+          <CreateThread />
+        </CardFooter>
+      )}
     </>
   );
 }

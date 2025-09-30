@@ -18,6 +18,7 @@
       "~/*": ["./src/*"],
       "@workspace/ui/*": ["../../packages/ui/src/*"]
     },
-    "noEmit": true
+    "noEmit": true,
+    "types": ["vite/client"]
   }
 }
