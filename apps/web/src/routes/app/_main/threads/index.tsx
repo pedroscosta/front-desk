@@ -25,7 +25,7 @@ import { useState } from "react";
 import { activeOrganizationAtom } from "~/lib/atoms";
 import { query } from "~/lib/live-state";
 
-export const Route = createFileRoute("/app/threads/")({
+export const Route = createFileRoute("/app/_main/threads/")({
   component: RouteComponent,
 });
 
