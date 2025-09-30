@@ -12,6 +12,7 @@ import { Spinner } from "@workspace/ui/components/spinner";
 import { useState } from "react";
 import { z } from "zod";
 import { authClient } from "~/lib/auth-client";
+import { useNavigate } from "@tanstack/react-router";
 
 const signInFormSchema = z.object({
   email: z.string().email(),
@@ -121,6 +122,8 @@ const signUpFormSchema = z
   });
 
 export const SignUpForm = () => {
+  const navigate = useNavigate();
+
   const { Field, handleSubmit } = useForm({
     defaultValues: {
       email: "",
@@ -144,6 +147,10 @@ export const SignUpForm = () => {
             setLoading(true);
           },
           onSuccess: () => {
+            // Alternative solution to BetterAuth callbackURL property not working in this case
+            navigate({
+              to: "/app",
+            });
             setLoading(false);
           },
           onError: (ctx) => {
