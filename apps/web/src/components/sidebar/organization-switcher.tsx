@@ -28,12 +28,6 @@ export function OrgSwitcher() {
     activeOrganizationAtom,
   );
 
-  if (!activeOrganization) {
-    setActiveOrganization(
-      Object.values(organizationUser)[0].organization as any,
-    );
-  }
-
   return (
     <SidebarMenu>
       <SidebarMenuItem>

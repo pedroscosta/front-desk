@@ -210,6 +210,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@bradenmacdonald/s3-lite-client':
+        specifier: jsr:^0.9.3
+        version: '@jsr/bradenmacdonald__s3-lite-client@0.9.3'
       '@faker-js/faker':
         specifier: ^10.0.0
         version: 10.0.0
@@ -248,7 +251,7 @@ importers:
         version: 4.1.0
       jotai:
         specifier: ^2.13.1
-        version: 2.13.1(@babel/core@7.28.4)(@babel/template@7.27.2)(@types/react@19.1.2)(react@19.1.0)
+        version: 2.13.1(@babel/core@7.28.3)(@babel/template@7.27.2)(@types/react@19.1.2)(react@19.1.0)
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
@@ -270,6 +273,9 @@ importers:
       react-hotkeys-hook:
         specifier: ^5.1.0
         version: 5.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      s3-lite-client:
+        specifier: link:jsr:@bradenmacdonald/s3-lite-client
+        version: link:jsr:@bradenmacdonald/s3-lite-client
       tailwind-merge:
         specifier: ^2.6.0
         version: 2.6.0
@@ -1859,6 +1865,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
+
+  '@jsr/bradenmacdonald__s3-lite-client@0.9.3':
+    resolution: {integrity: sha512-T+3K6M7pepU3uZm1rFCwS7ymVxo2BXdb8b4TQblqFxEWZWjtOmduzqaDVvcsaAvAIYg5q8CuF8YSNf0WX7bUIg==, tarball: https://npm.jsr.io/~/11/@jsr/bradenmacdonald__s3-lite-client/0.9.3.tgz}
 
   '@levischuck/tiny-cbor@0.2.11':
     resolution: {integrity: sha512-llBRm4dT4Z89aRsm6u2oEZ8tfwL/2l6BwpZ7JcyieouniDECM5AqNgr/y08zalEIvW3RSK4upYyybDcmjXqAow==}
@@ -9672,6 +9681,8 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
+  '@jsr/bradenmacdonald__s3-lite-client@0.9.3': {}
+
   '@levischuck/tiny-cbor@0.2.11': {}
 
   '@live-state/sync@0.0.4-beta.2(@types/react@19.1.2)(react@19.1.0)':
@@ -14395,9 +14406,9 @@ snapshots:
 
   jose@5.10.0: {}
 
-  jotai@2.13.1(@babel/core@7.28.4)(@babel/template@7.27.2)(@types/react@19.1.2)(react@19.1.0):
+  jotai@2.13.1(@babel/core@7.28.3)(@babel/template@7.27.2)(@types/react@19.1.2)(react@19.1.0):
     optionalDependencies:
-      '@babel/core': 7.28.4
+      '@babel/core': 7.28.3
       '@babel/template': 7.27.2
       '@types/react': 19.1.2
       react: 19.1.0

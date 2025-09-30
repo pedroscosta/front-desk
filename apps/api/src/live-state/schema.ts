@@ -15,6 +15,7 @@ const organization = object("organization", {
   name: string(),
   slug: string(),
   createdAt: timestamp(),
+  logoUrl: string().nullable(),
 });
 
 const organizationUser = object("organizationUser", {
@@ -22,6 +23,7 @@ const organizationUser = object("organizationUser", {
   organizationId: reference("organization.id"),
   userId: reference("user.id"),
   enabled: boolean().default(true),
+  role: string().default("user"),
 });
 
 const thread = object("thread", {
