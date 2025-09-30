@@ -31,7 +31,7 @@ export const Route = createFileRoute("/app")({
 
     return {
       organizationUser: orgUsers,
-      user,
+      ...user,
     };
   },
 });
