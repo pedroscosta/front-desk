@@ -96,10 +96,10 @@ const authorRelations = createRelations(author, ({ one }) => ({
 export const schema = createSchema({
   // models
   organization,
+  author,
   organizationUser,
   thread,
   message,
-  author,
   user,
   // relations
   organizationUserRelations,
