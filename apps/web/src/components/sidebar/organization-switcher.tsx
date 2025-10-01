@@ -33,9 +33,19 @@ export function OrgSwitcher() {
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <SidebarMenuButton className="w-fit px-1.5">
+            <SidebarMenuButton className="w-fit px-1.5 select-none">
               <div className="flex aspect-square size-5 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                <Command className="size-3" />
+                {activeOrganization?.logoUrl ? (
+                  <img
+                    width={20}
+                    height={20}
+                    src={activeOrganization.logoUrl}
+                    alt={`Logo of ${activeOrganization.name}`}
+                    className="size-5 object-cover shrink-0"
+                  />
+                ) : (
+                  <Command className="size-3 shrink-0" />
+                )}
               </div>
               <span className="truncate font-semibold">
                 {
@@ -65,9 +75,18 @@ export function OrgSwitcher() {
                 }
                 className="gap-2 p-2"
               >
-                <div className="flex size-6 items-center justify-center rounded-xs border">
-                  {/* TODO: Add team logo */}
-                  <Command className="size-4 shrink-0" />
+                <div className="flex size-6 items-center justify-center rounded-xs border overflow-clip">
+                  {userOrg.organization.logoUrl ? (
+                    <img
+                      width={24}
+                      height={24}
+                      src={userOrg.organization.logoUrl}
+                      alt={`Logo of ${userOrg.organization.name}`}
+                      className="size-6 object-cover shrink-0"
+                    />
+                  ) : (
+                    <Command className="size-4 shrink-0" />
+                  )}
                 </div>
                 {userOrg.organization.name}
                 {/* TODO: Bind keyboard shortcut */}
