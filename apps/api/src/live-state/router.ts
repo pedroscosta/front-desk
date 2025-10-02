@@ -17,7 +17,7 @@ export const router = createRouter({
   schema,
   routes: {
     organization: publicRoute
-      .createBasicRoute(schema.organization)
+      .collectionRoute(schema.organization)
       .withMutations(({ mutation }) => ({
         create: mutation(
           z.object({ name: z.string(), slug: z.string() })
@@ -29,6 +29,7 @@ export const router = createRouter({
             name: req.input!.name,
             slug: req.input!.slug,
             createdAt: new Date(),
+            logoUrl: null,
           });
 
           await db.insert(schema.organizationUser, {
@@ -36,14 +37,15 @@ export const router = createRouter({
             organizationId,
             userId: req.context.session.userId,
             enabled: true,
+            role: "owner",
           });
         }),
       })),
-    organizationUser: privateRoute.createBasicRoute(schema.organizationUser),
-    thread: privateRoute.createBasicRoute(schema.thread),
-    message: privateRoute.createBasicRoute(schema.message),
-    user: privateRoute.createBasicRoute(schema.user),
-    author: privateRoute.createBasicRoute(schema.author),
+    organizationUser: privateRoute.collectionRoute(schema.organizationUser),
+    thread: privateRoute.collectionRoute(schema.thread),
+    message: privateRoute.collectionRoute(schema.message),
+    user: privateRoute.collectionRoute(schema.user),
+    author: privateRoute.collectionRoute(schema.author),
   },
 });
 
