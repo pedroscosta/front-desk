@@ -1,10 +1,17 @@
 packages:
   - apps/*
   - packages/*
+
 catalog:
-  '@live-state/sync': ^0.0.4-beta.2
+  '@live-state/sync': ^0.0.4-beta.3
   zod: 4.1.9
+
 ignoredBuiltDependencies:
   - libpq
   - sharp
   - workerd
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - core-js-pure
+  - esbuild
