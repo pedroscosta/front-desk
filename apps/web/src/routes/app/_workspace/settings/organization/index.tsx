@@ -17,7 +17,7 @@ import { activeOrganizationAtom } from "~/lib/atoms";
 import { mutate, query } from "~/lib/live-state";
 import { uploadFile } from "~/lib/server-funcs/upload-file";
 
-export const Route = createFileRoute("/app/settings/organization/")({
+export const Route = createFileRoute("/app/_workspace/settings/organization/")({
   component: RouteComponent,
 });
 

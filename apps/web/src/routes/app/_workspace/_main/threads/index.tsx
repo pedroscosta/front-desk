@@ -54,7 +54,7 @@ import { CreateThread } from "~/components/devtools/create-thread";
 import { activeOrganizationAtom } from "~/lib/atoms";
 import { query } from "~/lib/live-state";
 
-export const Route = createFileRoute("/app/_main/threads/")({
+export const Route = createFileRoute("/app/_workspace/_main/threads/")({
   component: RouteComponent,
 });
 
