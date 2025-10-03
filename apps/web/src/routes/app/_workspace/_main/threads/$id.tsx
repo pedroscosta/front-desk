@@ -39,12 +39,12 @@ import { CircleUser } from "lucide-react";
 import { ulid } from "ulid";
 import { mutate, query } from "~/lib/live-state";
 
-export const Route = createFileRoute("/app/_main/threads/$id")({
+export const Route = createFileRoute("/app/_workspace/_main/threads/$id")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { user } = getRouteApi("/app").useLoaderData();
+  const { user } = getRouteApi("/app").useRouteContext();
   const { id } = Route.useParams();
 
   const thread = useLiveQuery(
@@ -143,6 +143,8 @@ function RouteComponent() {
                 content: JSON.stringify(value),
                 threadId: id,
                 createdAt: new Date(),
+                origin: null,
+                externalMessageId: null,
               });
             }}
           />

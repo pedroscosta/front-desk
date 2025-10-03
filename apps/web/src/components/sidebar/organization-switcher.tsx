@@ -22,7 +22,7 @@ import { useOrganizationSwitcher } from "~/lib/hooks/query/use-organization-swit
 export function OrgSwitcher() {
   const router = useRouter();
 
-  const { organizationUser } = useOrganizationSwitcher();
+  const { organizationUsers } = useOrganizationSwitcher();
 
   const [activeOrganization, setActiveOrganization] = useAtom(
     activeOrganizationAtom,
@@ -51,7 +51,7 @@ export function OrgSwitcher() {
                 {
                   (
                     activeOrganization ??
-                    Object.values(organizationUser)[0].organization
+                    Object.values(organizationUsers)[0].organization
                   ).name
                 }
               </span>
@@ -67,7 +67,7 @@ export function OrgSwitcher() {
             <DropdownMenuLabel className="text-muted-foreground text-xs">
               Organizations
             </DropdownMenuLabel>
-            {Object.entries(organizationUser).map(([id, userOrg], index) => (
+            {Object.entries(organizationUsers).map(([id, userOrg], index) => (
               <DropdownMenuItem
                 key={id}
                 onSelect={() =>

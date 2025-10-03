@@ -2,7 +2,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { Card } from "@workspace/ui/components/card";
 import { SettingsSidebar } from "~/components/sidebar/settings-sidebar";
 
-export const Route = createFileRoute("/app/settings")({
+export const Route = createFileRoute("/app/_workspace/settings")({
   component: RouteComponent,
 });
 
